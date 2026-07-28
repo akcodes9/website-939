@@ -802,7 +802,14 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
        has no caption to carry, so it stops at the image and lands a little
        under its neighbours — around 88% of them — which is what keeps the dark
        interval from reading as the tallest thing on the page. */
-    min-height: clamp(220px, 21vw, 330px);
+    /* Four times the band it was. At this height the section stops being a
+       layer with a dark background and becomes a full-bleed interval — taller
+       than the viewport on most laptops — which is the one place on the page
+       where that is the point: it is the only tonal event, and the only moving
+       footage, and both want room. Held in vw like the plate heights so it
+       tracks the same axis as the rest of the page, and capped at 1320 so an
+       ultrawide does not turn it into a minute of scrolling. */
+    min-height: clamp(880px, 84vw, 1320px);
     align-content: center;
   }
   .layer--flip .layer__body > :first-child { order: 2; }
