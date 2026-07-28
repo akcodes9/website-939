@@ -107,10 +107,10 @@
   <!-- The register. Ten rows, the trade colour stated as a rule at the left of
        each, and the drawing number on the right — which is where the two
        numbering systems stop being confusing, because you can see them side by
-       side. Layers 06 and 09 carry no plate and say so. -->
+       side. Layers 06, 09 and 10 carry no plate and say so. -->
   <nav class="register" id="register" aria-label="Drawing register" hidden>
     <div class="register__in">
-      <p class="m register__cap">Drawing register &middot; 10 layers, 7 plates</p>
+      <p class="m register__cap">Drawing register &middot; 11 layers, 7 plates</p>
       <ol class="register__list">
         <li><a href="#hero"><span class="m register__n">00</span><span class="register__t">General arrangement</span><span class="m register__d">No plate</span></a></li>
         <li><a href="#l01"><span class="m register__n">01</span><span class="register__t">Foundation</span><span class="m register__d">Dwg 01</span></a></li>
@@ -121,7 +121,8 @@
         <li style="--sys:var(--live)"><a href="#l06"><span class="m register__n">06</span><span class="register__t">Operations</span><span class="m register__d">No plate</span></a></li>
         <li><a href="#l07"><span class="m register__n">07</span><span class="register__t">Scale</span><span class="m register__d">Dwg 06</span></a></li>
         <li><a href="#l08"><span class="m register__n">08</span><span class="register__t">Sustainability</span><span class="m register__d">Dwg 07</span></a></li>
-        <li><a href="#l09"><span class="m register__n">09</span><span class="register__t">Expansion</span><span class="m register__d">No plate</span></a></li>
+        <li><a href="#l09"><span class="m register__n">09</span><span class="register__t">Founders</span><span class="m register__d">No plate</span></a></li>
+        <li><a href="#l10"><span class="m register__n">10</span><span class="register__t">Expansion</span><span class="m register__d">No plate</span></a></li>
       </ol>
     </div>
   </nav>
@@ -539,11 +540,55 @@
   </section>
 
   <!-- ======================================================================
-       09 EXPANSION — the close.
+       09 FOUNDERS
        =================================================================== -->
   <section class="layer wrap" id="l09">
     <div class="layer__head">
-      <p class="layer__idx" data-in><span class="m">Layer 09</span><span class="m">Expansion</span></p>
+      <p class="layer__idx" data-in><span class="m">Layer 09</span><span class="m">Founders</span></p>
+      <h2 class="h1" data-in>The names on the drawing.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          Every sheet in a set carries the names of the people answerable for
+          it — drawn by, checked by, approved by. A campus that does not exist
+          yet is a promise, and a promise is only worth the people who made it.
+          These are ours.
+        </p>
+      </div>
+
+      <!-- TODO(client): PLACEHOLDER PEOPLE. Nothing below is real. Replace the
+           name, the role and the line with the actual founders before this
+           section is published, or delete the section — an invented founder is
+           the one error on this page that cannot be walked back.
+
+           The pattern takes any number of entries; add or remove list items freely.
+           Keep the line to one sentence of what they have actually delivered.
+           No photographs: there is not a single one on this page, and the
+           opening states outright that nothing here is a photograph. -->
+      <ol class="founders" data-in>
+        <li>
+          <p class="founders__n">Founder name</p>
+          <p class="m founders__r">Role &middot; to be confirmed</p>
+          <p class="founders__b">One sentence on what they have built before, in
+             numbers rather than adjectives.</p>
+        </li>
+        <li>
+          <p class="founders__n">Founder name</p>
+          <p class="m founders__r">Role &middot; to be confirmed</p>
+          <p class="founders__b">One sentence on what they have built before, in
+             numbers rather than adjectives.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       10 EXPANSION — the close.
+       =================================================================== -->
+  <section class="layer wrap" id="l10">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 10</span><span class="m">Expansion</span></p>
       <h2 class="mega" data-in style="max-width:16ch">The AI revolution needs a new foundation.</h2>
       <p class="lead" data-in>
         Hyderabad is the first campus of a three gigawatt programme. Tenancy,

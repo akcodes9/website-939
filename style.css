@@ -631,6 +631,21 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
    blank page. The section rule is the one that means something, so the list
    stops ruling and lets it do the closing. */
 .notes > div:last-child, .claims > div:last-child { border-bottom: 0; }
+
+/* The people, set as a schedule like everything else on the page rather than as
+   cards. Cards would need portraits to justify themselves, and there is not a
+   photograph anywhere in this set — the opening says so outright. A name, a
+   role and one line is what a title block carries, and it is enough. */
+.founders { border-top: 1px solid var(--rule); }
+.founders > li {
+  display: grid; gap: var(--s1);
+  padding-block: var(--s3);
+  border-bottom: 1px solid var(--rule-2);
+}
+.founders > li:last-child { border-bottom: 0; }
+.founders__n { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.02em; color: var(--black); }
+.founders__r { color: var(--grey); }
+.founders__b { color: var(--charcoal); max-width: 46ch; text-wrap: pretty; }
 .notes dt { font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.08em;
             text-transform: uppercase; color: var(--grey); }
 .notes dd { font-family: var(--mono); font-size: var(--t-cap); color: var(--black); text-align: right; }
