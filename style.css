@@ -672,12 +672,10 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   }
 }
 
-/* Sits where a plate sits on every other layer, at the same scale, so the
-   column is filled by a drawing rather than by a box of text. Capped and
-   right-aligned: at the full 5fr it stood taller than the heading beside it,
-   which made the illustration the subject instead of the support. */
-.founders__fig { margin: 0; justify-self: end; width: 100%; max-width: 400px; }
-.founders__fig img { width: 100%; height: auto; }
+/* The paragraph fills its column here rather than stopping at .body's 58ch.
+   In the 5fr half that cap sits wider than the column at every width anyway, so
+   it never binds — but saying so keeps the two from disagreeing later. */
+.founders__intro .body { max-width: none; }
 
 .founders {
   margin-top: var(--s6);
