@@ -96,7 +96,7 @@
      230px of blank page between a plate's caption and the next layer's index,
      enough that a section could end and begin with nothing visible between
      them. The rule already does the dividing; the space was only repeating it. */
-  --s8: clamp(48px, 4.4vw, 80px);
+  --s8: clamp(36px, 3.2vw, 56px);
 
   --page: 1560px;
   --gut:  clamp(20px, 4.4vw, 76px);
@@ -626,6 +626,11 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   display: flex; align-items: baseline; justify-content: space-between; gap: var(--s3);
   padding-block: 13px; border-bottom: 1px solid var(--rule-2);
 }
+/* A ruled list that ends a section closed itself with a bottom rule, and the
+   section then opened with its own — two lines with nothing between them but
+   blank page. The section rule is the one that means something, so the list
+   stops ruling and lets it do the closing. */
+.notes > div:last-child, .claims > div:last-child { border-bottom: 0; }
 .notes dt { font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.08em;
             text-transform: uppercase; color: var(--grey); }
 .notes dd { font-family: var(--mono); font-size: var(--t-cap); color: var(--black); text-align: right; }
