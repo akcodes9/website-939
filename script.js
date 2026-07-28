@@ -742,7 +742,7 @@
       if (hero) {
         new IntersectionObserver(function (e) {
           if (!e[0].isIntersecting) { return; }
-          out.textContent = 'Layer 00 \u00B7 Design intent';
+          out.textContent = 'Layer 00 \u00B7 Overview';
           mark('hero');
           document.documentElement.style.removeProperty('--sys-now');
         }, { rootMargin: '-40% 0px -40% 0px' }).observe(hero);

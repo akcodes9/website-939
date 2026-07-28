@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Codex Space — documentation diagrams (source)</title>
+<!--
+  Source for every diagram in documentation/diagrams/.
+  Authored in the site's own drawing language — Archivo and Azeret Mono, pure
+  white ground, one-pixel rules, the four trade colours and the single live
+  accent — so the diagrams read as further sheets in the same set rather than
+  as clip art bolted onto it.
+
+  Rendered to PNG by scratchpad/diagrams.js, which screenshots each .sheet by
+  id at 2x. Regenerate by re-running that script against this file.
+-->
+<style>
+@font-face { font-family:"Archivo"; src:url("../../../assets/fonts/archivo.woff2") format("woff2-variations");
+             font-weight:400 700; font-stretch:100% 112%; font-display:block; }
+@font-face { font-family:"Azeret Mono"; src:url("../../../assets/fonts/azeret.woff2") format("woff2-variations");
+             font-weight:300 500; font-display:block; }
+
+:root{
+  --white:#FFF; --black:#000; --graphite:#1A1A1A; --charcoal:#3D3D3D;
+  --grey:#6E6E6E; --grey-2:#9B9B9B; --rule:#E4E4E4; --rule-2:#F0F0F0;
+  --live:#D6360B;
+  --power:#9A5200; --cooling:#15537F; --compute:#4B3A85; --network:#1C6041;
+  --sans:"Archivo",Helvetica,Arial,sans-serif;
+  --mono:"Azeret Mono",ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#DADADA;font-family:var(--sans);color:var(--graphite);
+     -webkit-font-smoothing:antialiased}
+h1,h2,h3,p,dl,dd,ol,ul,figure{margin:0}
+ol,ul{list-style:none;padding:0}
+
+.sheet{width:1400px;background:var(--white);padding:56px 60px 52px;margin:40px auto;
+       display:flex;flex-direction:column;position:relative}
+.m{font-family:var(--mono);font-weight:400;font-size:11px;letter-spacing:.08em;
+   text-transform:uppercase;color:var(--grey);font-variant-numeric:tabular-nums}
+.m--live{color:var(--live)}
+.sheet--wide{width:1600px}
+.sheet__hd{display:flex;justify-content:space-between;align-items:baseline;
+           padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:40px}
+.sheet__t{font-size:34px;font-weight:500;letter-spacing:-.026em;line-height:1.05;color:var(--black)}
+.sheet__sub{margin-top:10px;font-size:15px;color:var(--charcoal);max-width:92ch;line-height:1.5}
+.sheet__ft{margin-top:auto;padding-top:18px;border-top:1px solid var(--rule);
+           display:flex;justify-content:space-between;gap:32px}
+.lead{font-size:15px;color:var(--charcoal);line-height:1.55}
+
+/* ---- generic parts ---------------------------------------------------- */
+.grid{display:grid;gap:28px}
+.card{border:1px solid var(--rule);padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+.card__k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+.card__v{font-size:18px;font-weight:500;letter-spacing:-.015em;color:var(--black);line-height:1.2}
+.card__d{font-size:13px;color:var(--charcoal);line-height:1.5}
+.rulelist > div{display:grid;grid-template-columns:15ch 1fr;gap:24px;padding:12px 0;
+                border-bottom:1px solid var(--rule-2);align-items:baseline}
+.rulelist > div:last-child{border-bottom:0}
+.rulelist dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+.rulelist dd{font-size:14px;color:var(--charcoal);line-height:1.5}
+table{border-collapse:collapse;width:100%}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+   color:var(--grey);text-align:left;font-weight:400;padding:0 16px 10px 0;border-bottom:1px solid var(--rule)}
+td{font-size:13.5px;color:var(--charcoal);padding:11px 16px 11px 0;border-bottom:1px solid var(--rule-2);
+   vertical-align:top;line-height:1.45}
+td.mono{font-family:var(--mono);font-size:11.5px;color:var(--black);letter-spacing:.02em}
+td b{color:var(--black);font-weight:500}
+.chip{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+      text-transform:uppercase;padding:3px 7px;border:1px solid currentColor;color:var(--grey)}
+
+/* =====================================================================
+   01 SITE ARCHITECTURE
+   ================================================================== */
+.arch{display:grid;grid-template-columns:400px 1fr;gap:56px;align-items:start}
+.tree{font-family:var(--mono);font-size:12.5px;line-height:2.05;color:var(--charcoal)}
+.tree b{color:var(--black);font-weight:500}
+.tree .dim{color:var(--grey-2)}
+.tree .live{color:var(--live)}
+.archcol{display:grid;gap:0}
+.archrow{display:grid;grid-template-columns:170px 1fr 120px;gap:24px;padding:14px 0;
+         border-bottom:1px solid var(--rule-2);align-items:baseline}
+.archrow:first-child{border-top:1px solid var(--rule)}
+.archrow__n{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--black)}
+.archrow__d{font-size:13.5px;color:var(--charcoal);line-height:1.5}
+.archrow__s{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+            text-transform:uppercase;color:var(--grey);text-align:right}
+
+/* =====================================================================
+   02 NARRATIVE FLOW  ·  03 USER JOURNEY
+   ================================================================== */
+.flow{display:grid;grid-template-columns:repeat(11,1fr);gap:0;margin-top:8px}
+.flow__col{border-left:1px solid var(--rule);padding:0 12px 0 14px;position:relative;
+           min-height:340px;display:flex;flex-direction:column}
+.flow__col:last-child{border-right:1px solid var(--rule)}
+.flow__n{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--sys,var(--graphite));
+         padding-bottom:10px}
+.flow__t{font-size:15px;font-weight:500;letter-spacing:-.012em;color:var(--black);line-height:1.2;
+         padding-bottom:12px}
+.flow__b{font-size:11.5px;color:var(--charcoal);line-height:1.45}
+.flow__bar{height:5px;background:var(--sys,var(--graphite));margin-bottom:16px}
+.flow__tone{margin-top:auto;padding-top:14px;font-family:var(--mono);font-size:10px;
+            letter-spacing:.06em;text-transform:uppercase;color:var(--grey)}
+.flow__col[data-dark] .flow__t,.flow__col[data-dark] .flow__b{color:var(--white)}
+.flow__col[data-dark]{background:var(--black);padding-bottom:14px;border-left-color:var(--black)}
+.flow__col[data-dark] .flow__n,.flow__col[data-dark] .flow__tone{color:var(--grey-2)}
+
+.arc{margin-top:34px;border-top:1px solid var(--rule);padding-top:22px;
+     display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.arc__k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+        color:var(--live);padding-bottom:8px}
+.arc__d{font-size:13.5px;color:var(--charcoal);line-height:1.55}
+
+/* journey */
+.jrn{display:grid;gap:0;margin-top:6px}
+.jrn__r{display:grid;grid-template-columns:96px 150px 1fr 1fr 130px;gap:26px;
+        padding:15px 0;border-bottom:1px solid var(--rule-2);align-items:start}
+.jrn__r:first-child{border-top:1px solid var(--rule)}
+.jrn__d{font-family:var(--mono);font-size:11px;color:var(--black);letter-spacing:.04em}
+.jrn__s{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+        color:var(--sys,var(--grey))}
+.jrn__q{font-size:14px;color:var(--black);line-height:1.4}
+.jrn__a{font-size:13px;color:var(--charcoal);line-height:1.45}
+.jrn__m{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--grey);text-align:right}
+
+/* =====================================================================
+   04 VISUAL HIERARCHY
+   ================================================================== */
+.typ{display:grid;gap:0}
+.typ__r{display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:baseline;
+        padding:16px 0;border-bottom:1px solid var(--rule-2)}
+.typ__r:first-child{border-top:1px solid var(--rule)}
+.typ__spec{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--grey);
+           display:flex;gap:20px;justify-content:flex-end}
+.typ__spec b{color:var(--black);font-weight:400}
+.sp{display:grid;grid-template-columns:repeat(8,1fr);gap:16px;margin-top:6px}
+.sp__c{display:flex;flex-direction:column;gap:10px}
+.sp__bar{background:var(--graphite);width:100%}
+.sp__l{font-family:var(--mono);font-size:10.5px;color:var(--grey);letter-spacing:.05em}
+.sp__l b{color:var(--black);font-weight:400;display:block;font-size:11.5px}
+
+/* =====================================================================
+   05 COLOUR
+   ================================================================== */
+.sw{display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.sw__c{display:flex;flex-direction:column;gap:0;border:1px solid var(--rule)}
+.sw__p{height:104px}
+.sw__b{padding:12px 13px 14px;display:grid;gap:5px}
+.sw__n{font-size:13.5px;font-weight:500;color:var(--black);letter-spacing:-.01em}
+.sw__h{font-family:var(--mono);font-size:11px;color:var(--grey);letter-spacing:.05em}
+.sw__r{font-family:var(--mono);font-size:10.5px;color:var(--charcoal);letter-spacing:.04em}
+.sw__u{font-size:11.5px;color:var(--charcoal);line-height:1.4;padding-top:3px}
+
+/* =====================================================================
+   06 STACK  ·  07 MODULES  ·  10 PIPELINE  ·  11/12 DEPLOY
+   ================================================================== */
+.stack{display:grid;gap:14px}
+.stk{display:grid;grid-template-columns:190px 1fr;border:1px solid var(--rule);align-items:stretch}
+.stk__k{background:var(--rule-2);padding:16px 18px;display:flex;flex-direction:column;gap:5px;
+        justify-content:center;border-right:1px solid var(--rule)}
+.stk__kn{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--black)}
+.stk__kd{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--grey)}
+.stk__v{padding:15px 20px;display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 11px;
+      border:1px solid var(--rule);color:var(--black);background:var(--white)}
+.pill--none{color:var(--grey-2);border-style:dashed;text-decoration:line-through}
+.pill--live{color:var(--live);border-color:var(--live)}
+.stk__note{padding:0 20px 15px;font-size:12.5px;color:var(--charcoal);line-height:1.5;width:100%}
+
+.chain{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;align-items:stretch;gap:0}
+.chain__n{border:1px solid var(--rule);padding:18px 18px 20px;display:flex;flex-direction:column;gap:8px;
+          position:relative;margin-right:34px}
+.chain__n:last-child{margin-right:0}
+.chain__n::after{content:"";position:absolute;right:-34px;top:50%;width:34px;height:1px;background:var(--graphite)}
+.chain__n:last-child::after{display:none}
+.chain__n::before{content:"";position:absolute;right:-11px;top:50%;width:8px;height:8px;
+                  border-top:1px solid var(--graphite);border-right:1px solid var(--graphite);
+                  transform:translateY(-50%) rotate(45deg)}
+.chain__n:last-child::before{display:none}
+.chain__i{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;color:var(--live)}
+.chain__t{font-size:16px;font-weight:500;color:var(--black);letter-spacing:-.012em;line-height:1.2}
+.chain__d{font-size:12px;color:var(--charcoal);line-height:1.45}
+
+/* 08 opening timeline */
+.tl{margin-top:10px}
+.tl__ax{display:grid;grid-template-columns:repeat(6,1fr);border-bottom:1px solid var(--graphite);
+        padding-bottom:8px;margin-bottom:2px}
+.tl__ax span{font-family:var(--mono);font-size:10.5px;color:var(--grey);letter-spacing:.05em}
+.tl__r{display:grid;grid-template-columns:210px 1fr;gap:24px;align-items:center;padding:9px 0;
+       border-bottom:1px solid var(--rule-2)}
+.tl__k{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--black)}
+.tl__track{position:relative;height:22px;background:var(--rule-2)}
+.tl__bar{position:absolute;top:0;bottom:0;background:var(--graphite)}
+.tl__bar[data-live]{background:var(--live)}
+.tl__bar span{position:absolute;left:9px;top:50%;transform:translateY(-50%);
+              font-family:var(--mono);font-size:10px;color:var(--white);letter-spacing:.05em;white-space:nowrap}
+
+/* 09 responsive */
+.bp{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--rule)}
+.bp__c{border-left:1px solid var(--rule);padding:20px 20px 24px;display:flex;flex-direction:column;gap:12px}
+.bp__c:last-child{border-right:1px solid var(--rule)}
+.bp__w{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--live)}
+.bp__t{font-size:17px;font-weight:500;color:var(--black);letter-spacing:-.015em}
+.bp__l{font-size:12.5px;color:var(--charcoal);line-height:1.6}
+.bp__l li{padding-left:14px;position:relative}
+.bp__l li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:1px;background:var(--grey)}
+.frame{border:1px solid var(--graphite);margin-top:4px;background:var(--rule-2)}
+
+/* 13 waterfall */
+.wf__r{display:grid;grid-template-columns:210px 1fr 108px;gap:22px;align-items:center;
+       padding:7px 0;border-bottom:1px solid var(--rule-2)}
+.wf__k{font-family:var(--mono);font-size:11px;color:var(--black);letter-spacing:.03em}
+.wf__t{height:16px;background:var(--rule-2);position:relative}
+.wf__b{position:absolute;top:0;bottom:0;left:0;background:var(--graphite)}
+.wf__b[data-def]{background:var(--grey-2)}
+.wf__s{font-family:var(--mono);font-size:10.5px;color:var(--grey);text-align:right;letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     01 · SITE ARCHITECTURE
+     ================================================================== -->
+<section class="sheet" id="d01" style="min-height:1000px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 01 · Website architecture</p>
+      <h2 class="sheet__t" style="margin-top:12px">Three files, no build step, one request graph.</h2>
+      <p class="sheet__sub">Everything the browser executes is authored by hand and served as-is. There is
+        no bundler, no transpiler, no package manifest and no <code>node_modules</code>: what is in the
+        repository is byte-for-byte what reaches the visitor.</p>
+    </div>
+    <p class="m">Codex Space</p>
+  </div>
+
+  <div class="arch">
+    <div>
+      <p class="m" style="padding-bottom:16px">Shipped tree</p>
+      <div class="tree">
+<b>index.html</b>          <span class="dim">37.8 KB</span><br>
+<b>style.css</b>           <span class="dim">48.5 KB</span><br>
+<b>script.js</b>           <span class="dim">45.5 KB</span><br>
+assets/<br>
+&nbsp;&nbsp;fonts/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;archivo.woff2   <span class="dim">88.0 KB</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;azeret.woff2    <span class="dim">25.6 KB</span><br>
+&nbsp;&nbsp;draw/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--black)">7 plates</span> ×2 densities<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--black)">5 detail vignettes</span><br>
+&nbsp;&nbsp;video/<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ops.webm        <span class="dim">412.9 KB</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;ops.mp4         <span class="dim">447.7 KB</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;ops-poster.jpg  <span class="dim">30.6 KB</span><br>
+&nbsp;&nbsp;og.png          <span class="dim">121.8 KB</span><br>
+      </div>
+      <p class="m" style="margin-top:26px;padding-top:14px;border-top:1px solid var(--rule);line-height:1.9">
+        No package.json<br>No node_modules<br>No lockfile<br>No CI pipeline<br>
+        <span class="m--live">No third-party request</span>
+      </p>
+    </div>
+
+    <div>
+      <p class="m" style="padding-bottom:16px">What each file owns</p>
+      <div class="archcol">
+        <div class="archrow">
+          <span class="archrow__n">index.html</span>
+          <span class="archrow__d">Eleven <code>&lt;section&gt;</code> elements, one per layer, plus the drawing
+            register, the opening shell and the title block. Carries the full alt text for all twelve
+            drawings and an inline pre-paint script that decides whether the opening runs.</span>
+          <span class="archrow__s">Structure</span>
+        </div>
+        <div class="archrow">
+          <span class="archrow__n">style.css</span>
+          <span class="archrow__d">Ten numbered parts: tokens, reset, type, layout, cinema, sections, plates,
+            motion, responsive, print. All colour, spacing, type and motion is declared as custom
+            properties on <code>:root</code> and read from there.</span>
+          <span class="archrow__s">Presentation</span>
+        </div>
+        <div class="archrow">
+          <span class="archrow__n">script.js</span>
+          <span class="archrow__d">One IIFE, nine independent modules held in a registry and started inside
+            individual try/catch blocks, so a fault in one cannot take down the rest.</span>
+          <span class="archrow__s">Behaviour</span>
+        </div>
+        <div class="archrow">
+          <span class="archrow__n">assets/draw/</span>
+          <span class="archrow__d">Seven engineering plates at one true 30° isometric, each shipped at 1× and
+            2× as WebP and selected by <code>srcset</code>. Five detail vignettes carry the
+            sustainability schedule.</span>
+          <span class="archrow__s">Drawings</span>
+        </div>
+        <div class="archrow">
+          <span class="archrow__n">assets/fonts/</span>
+          <span class="archrow__d">Two self-hosted variable WebFonts, preloaded from the document head.
+            Self-hosting is what removes the last third-party origin from the page.</span>
+          <span class="archrow__s">Type</span>
+        </div>
+        <div class="archrow">
+          <span class="archrow__n">assets/video/</span>
+          <span class="archrow__d">One short operations clip in two containers with a poster frame.
+            <code>preload="none"</code>, started by observer only when Layer 06 is approached.</span>
+          <span class="archrow__s">Ground</span>
+        </div>
+      </div>
+
+      <p class="m" style="margin-top:34px;padding-bottom:14px">Request graph, measured</p>
+      <div class="rulelist">
+        <div><dt>First view</dt><dd><b style="color:var(--black)">8 requests · 607 KB</b> — document, stylesheet,
+          script, two fonts, poster frame and the two plates already inside the lazy-load margin.</dd></div>
+        <div><dt>Whole page</dt><dd><b style="color:var(--black)">19 requests · 2,019 KB</b> after scrolling
+          every section, including the operations clip.</dd></div>
+        <div><dt>Third party</dt><dd><b style="color:var(--black)">Zero.</b> One origin serves everything —
+          no CDN script, no font host, no analytics, no tag manager.</dd></div>
+        <div><dt>Document</dt><dd>372 DOM nodes across a 9,852 px page.</dd></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 01 · Website architecture</span>
+    <span class="m">Measured against the shipped tree</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     02 · NARRATIVE FLOW
+     ================================================================== -->
+<section class="sheet sheet--wide" id="d02" style="min-height:820px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 02 · Story flow</p>
+      <h2 class="sheet__t" style="margin-top:12px">The narrative is the structure. There are no marketing sections, only depths.</h2>
+      <p class="sheet__sub">The page is one machine shown in section. A reader enters at the ground and
+        descends through each trade in the order the campus is actually built, then comes back up to the
+        commercial close. Layer 06 is the single tonal inversion: the one sheet whose subject is something
+        happening rather than something arranged.</p>
+    </div>
+    <p class="m">11 layers · 7 plates</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow__col"><div class="flow__bar"></div><p class="flow__n">00</p>
+      <p class="flow__t">General arrangement</p>
+      <p class="flow__b">The whole machine, named but not yet taken apart. A title page carries a title.</p>
+      <p class="flow__tone">Title</p></div>
+    <div class="flow__col"><div class="flow__bar"></div><p class="flow__n">01</p>
+      <p class="flow__t">Foundation</p>
+      <p class="flow__b">The layer that cannot be revisited. Establishes that this is a construction
+        document, not a brochure.</p>
+      <p class="flow__tone">Dwg 01</p></div>
+    <div class="flow__col" style="--sys:var(--power)"><div class="flow__bar"></div><p class="flow__n">02</p>
+      <p class="flow__t">Power</p>
+      <p class="flow__b">The binding constraint. Settled before anything else can be, so it is drawn second.</p>
+      <p class="flow__tone">Dwg 02</p></div>
+    <div class="flow__col" style="--sys:var(--cooling)"><div class="flow__bar"></div><p class="flow__n">03</p>
+      <p class="flow__t">Cooling</p>
+      <p class="flow__b">The largest draw an operator controls. Drawn first rather than added last.</p>
+      <p class="flow__tone">Dwg 03</p></div>
+    <div class="flow__col" style="--sys:var(--compute)"><div class="flow__bar"></div><p class="flow__n">04</p>
+      <p class="flow__t">Compute</p>
+      <p class="flow__b">The deepest cut. One cabinet exploded — the unit every other layer exists to serve.</p>
+      <p class="flow__tone">Dwg 04</p></div>
+    <div class="flow__col" style="--sys:var(--network)"><div class="flow__bar"></div><p class="flow__n">05</p>
+      <p class="flow__t">Network</p>
+      <p class="flow__b">Two routes that never share a trench. Secured in the ground while it is still cheap.</p>
+      <p class="flow__tone">Dwg 05</p></div>
+    <div class="flow__col" data-dark style="--sys:var(--live);padding-top:0"><div class="flow__bar" style="background:var(--live)"></div>
+      <p class="flow__n">06</p>
+      <p class="flow__t">Operations</p>
+      <p class="flow__b">The machine running, not being built. The one tonal event on the page.</p>
+      <p class="flow__tone">Inversion</p></div>
+    <div class="flow__col"><div class="flow__bar"></div><p class="flow__n">07</p>
+      <p class="flow__t">Scale</p>
+      <p class="flow__b">Capital discipline: the most efficient megawatt is the one not yet built.</p>
+      <p class="flow__tone">Dwg 06</p></div>
+    <div class="flow__col"><div class="flow__bar"></div><p class="flow__n">08</p>
+      <p class="flow__t">Sustainability</p>
+      <p class="flow__b">The objections, stated first, answered as contract terms rather than intentions.</p>
+      <p class="flow__tone">Dwg 07</p></div>
+    <div class="flow__col"><div class="flow__bar"></div><p class="flow__n">09</p>
+      <p class="flow__t">Founders</p>
+      <p class="flow__b">The names on the drawing. A promise is worth the people who made it.</p>
+      <p class="flow__tone">No plate</p></div>
+    <div class="flow__col"><div class="flow__bar"></div><p class="flow__n">10</p>
+      <p class="flow__t">Expansion</p>
+      <p class="flow__b">The ask. Three gigawatts is the programme, not this campus — said plainly.</p>
+      <p class="flow__tone">Close</p></div>
+  </div>
+
+  <div class="arc">
+    <div><p class="arc__k">Act I · Credibility</p>
+      <p class="arc__d">Layers 00–01. Establish that the author can draw the thing. Nothing is claimed
+        before the ground is shown.</p></div>
+    <div><p class="arc__k">Act II · Competence</p>
+      <p class="arc__d">Layers 02–05. The four trades, each in its own colour, each ending one step closer
+        to the die. Difficulty increases; the drawings get more specific.</p></div>
+    <div><p class="arc__k">Act III · Consequence</p>
+      <p class="arc__d">Layers 06–08. The machine runs, the capital is phased, and the page takes its own
+        objections seriously before anyone else can raise them.</p></div>
+    <div><p class="arc__k">Act IV · Commitment</p>
+      <p class="arc__d">Layers 09–10. Who is answerable, and what is being asked for. The only two sheets
+        that mention people or money.</p></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 02 · Story flow</span>
+    <span class="m">Colour states the trade, not the mood</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     03 · USER JOURNEY
+     ================================================================== -->
+<section class="sheet sheet--wide" id="d03" style="min-height:1080px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 03 · User journey</p>
+      <h2 class="sheet__t" style="margin-top:12px">What the reader is asking at each depth, and what the page answers with.</h2>
+      <p class="sheet__sub">Three audiences share one scroll: a prospective tenant checking whether the
+        capacity is real, a lender checking whether the programme is bankable, and an engineer checking
+        whether the people drawing it know what they are doing. The descent answers all three in the same
+        order.</p>
+    </div>
+    <p class="m">Single page · 9,852 px</p>
+  </div>
+
+  <div class="jrn">
+    <div class="jrn__r"><span class="jrn__d">0.0 – 4.2 s</span><span class="jrn__s">Opening</span>
+      <span class="jrn__q">"Is this another AI landing page?"</span>
+      <span class="jrn__a">Six wireframe layers assemble on black from computed geometry. No stock render, no
+        photograph of a building that does not exist.</span>
+      <span class="jrn__m">Canvas 2D</span></div>
+    <div class="jrn__r"><span class="jrn__d">0 px</span><span class="jrn__s">Layer 00</span>
+      <span class="jrn__q">"What is the company, and how big?"</span>
+      <span class="jrn__a">One sentence, one turning word, and three figures ruled along the fold: 550 MW,
+        3 GW, Phase 01 ongoing.</span>
+      <span class="jrn__m">Hero · WebGL</span></div>
+    <div class="jrn__r"><span class="jrn__d">~1,000 px</span><span class="jrn__s">Layer 01</span>
+      <span class="jrn__q">"Have they actually done the groundwork?"</span>
+      <span class="jrn__a">A construction sequence read left to right — haul road, cut-and-fill, pile caps,
+        reinforcement, duct bank, slab joint.</span>
+      <span class="jrn__m">Dwg 01</span></div>
+    <div class="jrn__r" style="--sys:var(--power)"><span class="jrn__d">~1,900 px</span><span class="jrn__s">Layer 02</span>
+      <span class="jrn__q">"Where does 550 MW come from?"</span>
+      <span class="jrn__a">Grid to rack as one procured chain: gantry, substation, switchgear, UPS, standby,
+        busway.</span>
+      <span class="jrn__m">Dwg 02</span></div>
+    <div class="jrn__r" style="--sys:var(--cooling)"><span class="jrn__d">~2,900 px</span><span class="jrn__s">Layer 03</span>
+      <span class="jrn__q">"Can it cool a GPU hall?"</span>
+      <span class="jrn__a">A closed circuit drawn as one unbroken loop, ending in a magnified rack cutaway
+        with cold plates at the die.</span>
+      <span class="jrn__m">Dwg 03</span></div>
+    <div class="jrn__r" style="--sys:var(--compute)"><span class="jrn__d">~3,900 px</span><span class="jrn__s">Layer 04</span>
+      <span class="jrn__q">"Do they understand the load they are serving?"</span>
+      <span class="jrn__a">The cabinet exploded — chassis, cold plates, PDU strips, a rear door that is
+        itself a heat exchanger.</span>
+      <span class="jrn__m">Dwg 04</span></div>
+    <div class="jrn__r" style="--sys:var(--network)"><span class="jrn__d">~5,000 px</span><span class="jrn__s">Layer 05</span>
+      <span class="jrn__q">"What happens when a backhoe finds the duct?"</span>
+      <span class="jrn__a">Two physically separate routes entering opposite corners into two independent
+        meet-me rooms.</span>
+      <span class="jrn__m">Dwg 05</span></div>
+    <div class="jrn__r" style="--sys:var(--live)"><span class="jrn__d">~6,000 px</span><span class="jrn__s">Layer 06</span>
+      <span class="jrn__q">"Who is awake at 3 a.m.?"</span>
+      <span class="jrn__a">The page inverts to black and the only moving footage on the site plays behind
+        the type. Tone carries what a diagram cannot.</span>
+      <span class="jrn__m">Video · inverted</span></div>
+    <div class="jrn__r"><span class="jrn__d">~6,800 px</span><span class="jrn__s">Layer 07</span>
+      <span class="jrn__q">"Am I paying for empty halls?"</span>
+      <span class="jrn__a">Four stages in a row: bare platform, one hall, two halls, four halls with
+        perimeter. Stage 01 marked live.</span>
+      <span class="jrn__m">Dwg 06</span></div>
+    <div class="jrn__r"><span class="jrn__d">~7,400 px</span><span class="jrn__s">Layer 08</span>
+      <span class="jrn__q">"What about the water, the grid and the land?"</span>
+      <span class="jrn__a">Five objections named out loud and answered as terms in the EPC works contract,
+        each with its own detail drawing.</span>
+      <span class="jrn__m">Dwg 07 + 5 details</span></div>
+    <div class="jrn__r"><span class="jrn__d">~8,700 px</span><span class="jrn__s">Layer 09</span>
+      <span class="jrn__q">"Who is answerable for this?"</span>
+      <span class="jrn__a">Three title-block cards. Currently placeholders, worded in the same register as
+        every other unknown on the page.</span>
+      <span class="jrn__m">No plate</span></div>
+    <div class="jrn__r"><span class="jrn__d">~9,400 px</span><span class="jrn__s">Layer 10</span>
+      <span class="jrn__q">"What do they want from me?"</span>
+      <span class="jrn__a">Tenancy, capital and delivery conversations are open now — with the 3 GW figure
+        explicitly scoped to the programme, not this city.</span>
+      <span class="jrn__m">Close · mailto</span></div>
+  </div>
+
+  <p class="m" style="margin-top:30px;padding-top:16px;border-top:1px solid var(--rule)">Wayfinding is available at every depth</p>
+  <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:16px">
+    <div class="card"><span class="card__k">Always on screen</span><span class="card__v">The title block</span>
+      <span class="card__d">The fixed bar names the layer the viewport's midline is currently inside, and
+        takes that layer's trade colour. It is the drawing's corner block, not a nav menu.</span></div>
+    <div class="card"><span class="card__k">One press away</span><span class="card__v">The drawing register</span>
+      <span class="card__d">Ten rows, each with its trade colour as a rule and its drawing number on the
+        right. Layers with no plate say "No plate" rather than being omitted.</span></div>
+    <div class="card"><span class="card__k">Continuous</span><span class="card__v">The depth rule</span>
+      <span class="card__d">A single hairline under the bar, scaled to scroll progress and tinted to the
+        current trade. Depth replaces a permanent nine-item index in the margin.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 03 · User journey</span>
+    <span class="m">Depths are approximate at 1600 px wide</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     04 · VISUAL HIERARCHY
+     ================================================================== -->
+<section class="sheet" id="d04" style="min-height:1000px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 04 · Visual hierarchy</p>
+      <h2 class="sheet__t" style="margin-top:12px">A drawing sheet has a title and a lot of 8&nbsp;pt notes. Very little in between.</h2>
+      <p class="sheet__sub">The type scale is deliberately bimodal. The display end is enormous and fluid;
+        the apparatus end is 11&nbsp;px monospace, tracked and uppercased. The gap between them is the
+        hierarchy — there is no ladder of six near-identical heading sizes to get lost in.</p>
+    </div>
+    <p class="m">Archivo · Azeret Mono</p>
+  </div>
+
+  <div class="typ">
+    <div class="typ__r"><span style="font-size:58px;font-weight:500;letter-spacing:-.036em;line-height:1.02;color:var(--black)">The future of AI</span>
+      <span class="typ__spec"><span>.mega</span><b>clamp(46 – 132 px)</b><span>−0.036 em</span></span></div>
+    <div class="typ__r"><span style="font-size:40px;font-weight:500;letter-spacing:-.028em;line-height:1.02;color:var(--black)">Grid to rack, one chain</span>
+      <span class="typ__spec"><span>.h1</span><b>clamp(32 – 68 px)</b><span>−0.028 em</span></span></div>
+    <div class="typ__r"><span style="font-size:26px;font-weight:500;letter-spacing:-.02em;color:var(--black)">To be announced</span>
+      <span class="typ__spec"><span>.h2 / founder</span><b>clamp(24 – 40 px)</b><span>−0.02 em</span></span></div>
+    <div class="typ__r"><span style="font-size:19px;color:var(--charcoal);line-height:1.5">Modular build-out aligns capital with tenant ramp-up.</span>
+      <span class="typ__spec"><span>.lead</span><b>clamp(17 – 21 px)</b><span>44 ch</span></span></div>
+    <div class="typ__r"><span style="font-size:16px;color:var(--charcoal);line-height:1.6">Power availability is the binding constraint on a campus of this scale.</span>
+      <span class="typ__spec"><span>.body</span><b>16 px</b><span>58 ch</span></span></div>
+    <div class="typ__r"><span class="m" style="font-size:11px">Layer 02 · Power · Dwg 02 · In development</span>
+      <span class="typ__spec"><span>.m (apparatus)</span><b>11 px mono</b><span>+0.08 em</span></span></div>
+  </div>
+
+  <p class="m" style="margin-top:40px;padding-bottom:16px">The spacing scale — eight steps, two of them fluid</p>
+  <div class="sp">
+    <div class="sp__c"><div class="sp__bar" style="height:8px"></div><span class="sp__l"><b>--s1</b>8 px</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:16px"></div><span class="sp__l"><b>--s2</b>16 px</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:24px"></div><span class="sp__l"><b>--s3</b>24 px</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:40px"></div><span class="sp__l"><b>--s4</b>40 px</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:64px"></div><span class="sp__l"><b>--s5</b>64 px</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:96px"></div><span class="sp__l"><b>--s6</b>96 px</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:112px;background:var(--live)"></div><span class="sp__l"><b>--s7</b>64 – 112 px fluid</span></div>
+    <div class="sp__c"><div class="sp__bar" style="height:56px;background:var(--live)"></div><span class="sp__l"><b>--s8</b>36 – 56 px fluid</span></div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-top:44px">
+    <div class="card"><span class="card__k">Grid</span><span class="card__v">5 fr / 7 fr</span>
+      <span class="card__d">Prose left, plate right, above 860 px. Alternate layers flip the order so the
+        eye crosses the page rather than running down one gutter. Founders reverses the ratio, because
+        there the prose is the supporting half.</span></div>
+    <div class="card"><span class="card__k">Measure</span><span class="card__v">44 – 68 ch</span>
+      <span class="card__d">Lead copy stops at 44 ch, body at 58 ch, the hero lead at 68 ch. The hero is
+        wider on purpose: three sentences under a display headline, not a column to read down.</span></div>
+    <div class="card"><span class="card__k">Page</span><span class="card__v">1560 px max</span>
+      <span class="card__d">Gutter is fluid from 20 px to 76 px. The headline deliberately escapes the
+        measure at 96 vw so its two lines rag downward rather than zig-zag.</span></div>
+    <div class="card"><span class="card__k">Rules</span><span class="card__v">1 px, three greys</span>
+      <span class="card__d">#E4E4E4 for structural rules, #F0F0F0 inside lists, the trade colour where a
+        rule belongs to a system. Nothing on the page has a border radius or a shadow.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 04 · Visual hierarchy</span>
+    <span class="m">Values read from :root in style.css</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     05 · COLOUR SYSTEM
+     ================================================================== -->
+<section class="sheet" id="d05" style="min-height:940px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 05 · Colour system</p>
+      <h2 class="sheet__t" style="margin-top:12px">On an engineering drawing a colour means a state. Here it means one too.</h2>
+      <p class="sheet__sub">Monochrome carries the whole page. One accent appears only where something is
+        energised, current or under the cursor. Four trade colours identify which system you are looking at
+        — and each is carried simultaneously by the drawing's ink, the layer index, the title block and the
+        depth rule, so the hue never stops at a section edge.</p>
+    </div>
+    <p class="m">All ratios vs #FFFFFF</p>
+  </div>
+
+  <p class="m" style="padding-bottom:16px">The ramp</p>
+  <div class="sw">
+    <div class="sw__c"><div class="sw__p" style="background:#FFF;border-bottom:1px solid var(--rule)"></div>
+      <div class="sw__b"><span class="sw__n">White</span><span class="sw__h">#FFFFFF</span>
+        <span class="sw__r">Page ground</span><span class="sw__u">The same white as every drawing's ground, which is why no plate needs a frame, a card or an edge.</span></div></div>
+    <div class="sw__c"><div class="sw__p" style="background:#000"></div>
+      <div class="sw__b"><span class="sw__n">Black</span><span class="sw__h">#000000</span>
+        <span class="sw__r">21.0 : 1</span><span class="sw__u">Headings, and the ground of the opening and of Layer 06.</span></div></div>
+    <div class="sw__c"><div class="sw__p" style="background:#1A1A1A"></div>
+      <div class="sw__b"><span class="sw__n">Graphite</span><span class="sw__h">#1A1A1A</span>
+        <span class="sw__r">17.4 : 1</span><span class="sw__u">Body default and the neutral fallback for --sys.</span></div></div>
+    <div class="sw__c"><div class="sw__p" style="background:#3D3D3D"></div>
+      <div class="sw__b"><span class="sw__n">Charcoal</span><span class="sw__h">#3D3D3D</span>
+        <span class="sw__r">10.9 : 1</span><span class="sw__u">Paragraph copy — a step back from the headings without going grey.</span></div></div>
+    <div class="sw__c"><div class="sw__p" style="background:#6E6E6E"></div>
+      <div class="sw__b"><span class="sw__n">Grey</span><span class="sw__h">#6E6E6E</span>
+        <span class="sw__r">5.1 : 1</span><span class="sw__u">The apparatus. Documented as the floor for text on white.</span></div></div>
+    <div class="sw__c"><div class="sw__p" style="background:#D6360B"></div>
+      <div class="sw__b"><span class="sw__n">Live</span><span class="sw__h">#D6360B</span>
+        <span class="sw__r">4.78 : 1 · 4.39 on black</span><span class="sw__u">Energised state only. The one colour that clears the 3:1 non-text minimum on white, on black and on the opening — so one focus ring covers the whole page.</span></div></div>
+  </div>
+
+  <p class="m" style="margin-top:44px;padding-bottom:16px">The trades — sampled from the shipped drawings, not from the stylesheet</p>
+  <table>
+    <thead><tr><th style="width:140px">Layer</th><th style="width:150px">Token</th><th style="width:130px">Declared</th>
+      <th style="width:130px">Contrast</th><th style="width:160px">Ink measured in plate</th><th>Why this hue</th></tr></thead>
+    <tbody>
+      <tr><td><b>02 Power</b></td><td class="mono">--sys-power</td><td class="mono" style="color:#9A5200">#9A5200</td>
+        <td class="mono">5.86 : 1</td><td class="mono" style="color:#AA6E29">#AA6E29</td>
+        <td>Amber is the colour an electrical services drawing already uses for HV and LV distribution.</td></tr>
+      <tr><td><b>03 Cooling</b></td><td class="mono">--sys-cooling</td><td class="mono" style="color:#15537F">#15537F</td>
+        <td class="mono">8.15 : 1</td><td class="mono" style="color:#114E7A">#114E7A</td>
+        <td>Chilled-water blue, straight off a mechanical services set.</td></tr>
+      <tr><td><b>04 Compute</b></td><td class="mono">--sys-compute</td><td class="mono" style="color:#4B3A85">#4B3A85</td>
+        <td class="mono">9.36 : 1</td><td class="mono" style="color:#55488C">#55488C</td>
+        <td>The one trade with no drawing-office convention, so it takes the remaining distinct hue.</td></tr>
+      <tr><td><b>05 Network</b></td><td class="mono">--sys-network</td><td class="mono" style="color:#1C6041">#1C6041</td>
+        <td class="mono">7.50 : 1</td><td class="mono" style="color:#427A62">#427A62</td>
+        <td>Data green, as used for communications containment.</td></tr>
+      <tr><td><b>01 · 07 · 08</b></td><td class="mono">(none)</td><td class="mono">#1A1A1A</td>
+        <td class="mono">17.4 : 1</td><td class="mono">neutral grey ramp</td>
+        <td>Ground, phasing and stewardship are not a system — they are every system at once, or none — so they stay neutral. Measurement confirms the four detail vignettes are neutral too.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 05 · Colour system</span>
+    <span class="m">Ink sampled from the most saturated 2.5% of dark pixels per plate</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     06 · TECHNOLOGY STACK
+     ================================================================== -->
+<section class="sheet" id="d06" style="min-height:1000px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 06 · Technology stack</p>
+      <h2 class="sheet__t" style="margin-top:12px">The stack, as it actually is — not as a starter template would have it.</h2>
+      <p class="sheet__sub">Inspected rather than assumed. There is no framework, no build tool and no
+        runtime dependency anywhere in this project. Everything below the dashed entries is present;
+        everything struck through was deliberately not adopted, and in two cases was removed after being
+        tried.</p>
+    </div>
+    <p class="m">Verified against the repository</p>
+  </div>
+
+  <div class="stack">
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Markup</span><span class="stk__kd">index.html</span></div>
+      <div class="stk__v"><span class="pill">HTML5</span><span class="pill">Semantic sectioning</span>
+        <span class="pill">dl / dt / dd schedules</span><span class="pill">figure + figcaption</span>
+        <span class="pill">ARIA: dialog, expanded, current</span><span class="pill">inert</span>
+        <span class="pill--none pill">JSX</span><span class="pill--none pill">Templating</span></div></div>
+
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Styling</span><span class="stk__kd">style.css</span></div>
+      <div class="stk__v"><span class="pill">Hand-authored CSS</span><span class="pill">Custom properties</span>
+        <span class="pill">CSS Grid</span><span class="pill">clamp() fluid scales</span>
+        <span class="pill">@supports gating</span><span class="pill">@starting-style</span>
+        <span class="pill">allow-discrete</span><span class="pill">scroll() timeline</span>
+        <span class="pill">@media print</span>
+        <span class="pill--none pill">Tailwind</span><span class="pill--none pill">Sass</span>
+        <span class="pill--none pill">CSS-in-JS</span></div></div>
+
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Behaviour</span><span class="stk__kd">script.js</span></div>
+      <div class="stk__v"><span class="pill">ES5-compatible IIFE</span><span class="pill">IntersectionObserver ×6</span>
+        <span class="pill">requestAnimationFrame</span><span class="pill">Canvas 2D</span>
+        <span class="pill">WebGL 1 (raw)</span><span class="pill">matchMedia</span>
+        <span class="pill--none pill">React</span><span class="pill--none pill">Framer Motion</span>
+        <span class="pill--none pill">GSAP</span><span class="pill--none pill">Three.js</span>
+        <span class="pill--none pill">Lenis</span></div>
+      <p class="stk__note">Two of these were tried and removed. The opening was to be generated video —
+        it melts line geometry, so it is computed instead. The hero field was Three.js — 703&nbsp;KB of ES
+        module that could not run from a <code>file://</code> URL at all, replaced by two shaders and two
+        buffers. The turning headline and the register are ports of React components, rewritten as one
+        element each with no node churn.</p></div>
+
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Type</span><span class="stk__kd">assets/fonts</span></div>
+      <div class="stk__v"><span class="pill">Archivo · variable · 88.0 KB</span>
+        <span class="pill">Azeret Mono · variable · 25.6 KB</span>
+        <span class="pill">WOFF2</span><span class="pill">rel=preload</span><span class="pill">font-display: swap</span>
+        <span class="pill--none pill">Google Fonts CDN</span></div></div>
+
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Imagery</span><span class="stk__kd">assets/draw</span></div>
+      <div class="stk__v"><span class="pill">WebP, 1× and 2×</span><span class="pill">srcset + sizes</span>
+        <span class="pill">loading=lazy</span><span class="pill">decoding=async</span>
+        <span class="pill">intrinsic width/height</span>
+        <span class="pill--none pill">Icon font</span><span class="pill--none pill">SVG sprite</span>
+        <span class="pill--none pill">Photography</span></div>
+      <p class="stk__note">There is not one icon and not one photograph anywhere in the set. Every image is
+        an engineering drawing at a true 30° isometric.</p></div>
+
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Rendering</span><span class="stk__kd">delivery</span></div>
+      <div class="stk__v"><span class="pill--live pill">Static · fully pre-rendered</span>
+        <span class="pill">No server runtime</span><span class="pill">Opens from file://</span>
+        <span class="pill--none pill">SSR</span><span class="pill--none pill">ISR</span>
+        <span class="pill--none pill">API routes</span><span class="pill--none pill">Middleware</span>
+        <span class="pill--none pill">Database</span></div></div>
+
+    <div class="stk"><div class="stk__k"><span class="stk__kn">Toolchain</span><span class="stk__kd">none</span></div>
+      <div class="stk__v"><span class="pill--none pill">npm / pnpm / yarn</span><span class="pill--none pill">Vite / webpack</span>
+        <span class="pill--none pill">Babel / TypeScript</span><span class="pill--none pill">PostCSS</span>
+        <span class="pill--none pill">Lockfile</span><span class="pill--none pill">CI pipeline</span>
+        <span class="pill">git</span></div>
+      <p class="stk__note">The build command is: none. Deployment is a file copy. This is the single most
+        consequential technical decision in the project — it is what makes the site hostable on any plan of
+        any provider, and what means it cannot rot when a dependency does.</p></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 06 · Technology stack</span>
+    <span class="m">Struck-through entries are absent by decision</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     07 · RUNTIME MODULES
+     ================================================================== -->
+<section class="sheet" id="d07" style="min-height:900px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 07 · Runtime modules</p>
+      <h2 class="sheet__t" style="margin-top:12px">Nine modules, started independently, each with a stated failure state.</h2>
+      <p class="sheet__sub">They were nine bare calls in a row once, which meant a throw anywhere took out
+        every module after it — a fault in the WebGL field was enough to stop the headline turning, silently.
+        They are now iterated from a registry inside individual try/catch blocks, and the registry is audited
+        at load so a missing function is reported rather than swallowed.</p>
+    </div>
+    <p class="m">script.js · one IIFE</p>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:130px">Module</th><th style="width:150px">Owns</th><th style="width:190px">Trigger</th>
+      <th style="width:230px">Cost control</th><th>If it never runs</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">initCine</td><td><b>The opening</b></td><td>Pre-paint attribute on &lt;html&gt;</td>
+        <td>4.2 s then self-destructs; canvas backing store released; skipped entirely if the URL carries a hash or reduced motion is set</td>
+        <td>A 9-second failsafe releases the page; the site is simply the site</td></tr>
+      <tr><td class="mono">initWeave</td><td><b>The hero field</b></td><td>Runs on load, gated by IntersectionObserver</td>
+        <td>Pauses whenever the hero leaves the viewport; a frame allocates nothing; context-loss handler stops the loop</td>
+        <td>No WebGL, no field — the hero is white, and the type was always solid black on white</td></tr>
+      <tr><td class="mono">initNav</td><td><b>Bar background</b></td><td>Observer on the hero, −70 px margin</td>
+        <td>One observer, no listener</td><td>Bar stays transparent</td></tr>
+      <tr><td class="mono">initSheet</td><td><b>Title block + depth</b></td><td>Observer band across the viewport midline</td>
+        <td>Depth is driven by a CSS scroll timeline on the compositor where supported; the rAF-coalesced scroll listener binds only where it is not</td>
+        <td>Bar keeps its authored label; the depth rule stays at zero</td></tr>
+      <tr><td class="mono">initRegister</td><td><b>The sheet list</b></td><td>Click on the title block</td>
+        <td>Listeners attached only while open, removed on close</td>
+        <td>Panel stays closed; every layer is still reachable by scrolling, and the rows are plain anchors</td></tr>
+      <tr><td class="mono">initReveal</td><td><b>Seating motion</b></td><td>Observer per [data-in] element, unobserved once fired</td>
+        <td>Stagger index computed at runtime, capped at 5 steps</td>
+        <td>Nothing hides itself — the flag that enables hiding is set only after the observer is known to be constructible</td></tr>
+      <tr><td class="mono">initRotate</td><td><b>The turning word</b></td><td>Timer chained per word, 6 s / 3 s dwell</td>
+        <td>Holds on pointer-over and whenever the hero is off screen; never starts under reduced motion</td>
+        <td>Headline reads "…begins with infrastructure." and stays there</td></tr>
+      <tr><td class="mono">initOps</td><td><b>Layer 06 ground</b></td><td>Observer at ±25% around the section</td>
+        <td><code>preload="none"</code>, so the first byte is not fetched until the section is approached; blocked autoplay is caught and ignored</td>
+        <td>The poster frame is the clip's own first frame, so the section still reads</td></tr>
+      <tr><td class="mono">initYear</td><td><b>Footer year</b></td><td>Once, on boot</td>
+        <td>One assignment</td><td>The markup's own 2026 stands</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:34px">
+    <div class="card"><span class="card__k">Principle 01</span><span class="card__v">Position drives behaviour</span>
+      <span class="card__d">Anything triggered by where the reader is uses IntersectionObserver. There are six.
+        The single scroll listener that remains is rAF-coalesced, passive, writes one custom property, and
+        does not bind at all where the CSS scroll timeline is supported.</span></div>
+    <div class="card"><span class="card__k">Principle 02</span><span class="card__v">Degrade to the finished page</span>
+      <span class="card__d">Every module's failure state is a working static page. Nothing hides itself
+        until JavaScript has proven it can bring it back.</span></div>
+    <div class="card"><span class="card__k">Principle 03</span><span class="card__v">Motion is CSS, not JS</span>
+      <span class="card__d">prefers-reduced-motion is honoured in the stylesheet. JavaScript consults it only
+        where it would otherwise start a loop — the WebGL field, the video and the turning word.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 07 · Runtime modules</span>
+    <span class="m">All nine audited at load</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     08 · OPENING SEQUENCE
+     ================================================================== -->
+<section class="sheet" id="d08" style="min-height:800px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 08 · Opening sequence</p>
+      <h2 class="sheet__t" style="margin-top:12px">4.2 seconds, computed — the same drawing as the rest of the site, moving.</h2>
+      <p class="sheet__sub">Projected from geometry rather than filmed. The whole page is a set of plates at
+        a true 30° isometric; generated video melts line geometry and a raster of a wireframe cannot stay
+        crisp at any size. Six layers rise into position bottom-first, the ground grid draws outward from
+        the origin, and dashed construction lines connect the corners once there is something to connect.</p>
+    </div>
+    <p class="m">Canvas 2D · DUR 4200 ms</p>
+  </div>
+
+  <div class="tl">
+    <div class="tl__ax"><span>0.0 s</span><span>0.7 s</span><span>1.4 s</span><span>2.1 s</span><span>2.8 s</span><span>3.5 s</span></div>
+    <div class="tl__r"><span class="tl__k">Ground grid</span><div class="tl__track">
+      <div class="tl__bar" style="left:0%;width:16%"><span>draws outward from origin</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Layer 1 — slab</span><div class="tl__track">
+      <div class="tl__bar" style="left:10%;width:32%"><span>foundation</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Layer 2 — gear</span><div class="tl__track">
+      <div class="tl__bar" style="left:18.5%;width:32%"><span>electrical</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Layer 3 — pipe</span><div class="tl__track">
+      <div class="tl__bar" style="left:27%;width:32%"><span>cooling</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Layer 4 — racks</span><div class="tl__track">
+      <div class="tl__bar" style="left:35.5%;width:32%"><span>compute</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Layer 5 — tray</span><div class="tl__track">
+      <div class="tl__bar" style="left:44%;width:32%"><span>network</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Layer 6 — roof</span><div class="tl__track">
+      <div class="tl__bar" style="left:52.5%;width:32%"><span>roof plant</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Construction lines</span><div class="tl__track">
+      <div class="tl__bar" style="left:46%;width:40%"><span>dashed, corner to corner</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Assembly holds</span><div class="tl__track">
+      <div class="tl__bar" data-live style="left:86%;width:14%"><span>"Assembled"</span></div></div></div>
+    <div class="tl__r"><span class="tl__k">Hand-off to the page</span><div class="tl__track">
+      <div class="tl__bar" data-live style="left:70%;width:30%"><span>+320 ms, then a 900 ms cross-fade to white</span></div></div></div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-top:44px">
+    <div class="card"><span class="card__k">Easing</span><span class="card__v">1 − (1−t)³</span>
+      <span class="card__d">Cubic ease-out on every span. Nothing overshoots and nothing bounces: motion here
+        reads as machinery seating, not as a UI toy.</span></div>
+    <div class="card"><span class="card__k">Stagger</span><span class="card__v">85 ms per layer</span>
+      <span class="card__d">Bottom first, in build order. You watch a campus being assembled in the sequence
+        it is actually assembled in — ground, power, cooling, compute, network, roof.</span></div>
+    <div class="card"><span class="card__k">Escape</span><span class="card__v">Three ways out</span>
+      <span class="card__d">A Skip control, the Escape key, or waiting. The page behind is held
+        <code>inert</code> so a keyboard reader cannot navigate a document they cannot see.</span></div>
+    <div class="card"><span class="card__k">Never runs when</span><span class="card__v">Hash · reduced motion</span>
+      <span class="card__d">Decided before first paint by an inline script, so the page is never briefly
+        visible underneath. A deep link skips the opening; so does a reduced-motion preference.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 08 · Opening sequence</span>
+    <span class="m">Timings read from initCine in script.js</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     09 · RESPONSIVE MAP
+     ================================================================== -->
+<section class="sheet" id="d09" style="min-height:820px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 09 · Responsive behaviour</p>
+      <h2 class="sheet__t" style="margin-top:12px">Four breakpoints, and each one changes a composition rather than a size.</h2>
+      <p class="sheet__sub">Type and spacing are fluid via <code>clamp()</code>, so the breakpoints are not
+        there to resize things — they are there for the three places where a layout has to become a
+        different layout.</p>
+    </div>
+    <p class="m">min-width, mobile-first</p>
+  </div>
+
+  <div class="bp">
+    <div class="bp__c">
+      <p class="bp__w">&lt; 460 px</p><p class="bp__t">Phone</p>
+      <div class="frame" style="height:120px;width:56px;margin-bottom:6px"></div>
+      <ul class="bp__l">
+        <li>Headline returns inside the gutter and wraps normally — the descending rag is a wide-screen composition</li>
+        <li>Wordmark shortens to 11 px mono so the layer name survives; knowing which layer you are in matters more on a small screen, not less</li>
+        <li>Spec row is two columns</li>
+        <li>Founders are a scroll-snapped rail at 82% width</li>
+      </ul></div>
+    <div class="bp__c">
+      <p class="bp__w">700 px</p><p class="bp__t">Register</p>
+      <div class="frame" style="height:120px;width:86px;margin-bottom:6px"></div>
+      <ul class="bp__l">
+        <li>Drawing register becomes two columns</li>
+        <li>Column flow, not row flow — a register is read down one column and then down the next</li>
+        <li>Panel scrolls internally with <code>overscroll-behavior: contain</code>, because ten 44 px rows do not fit a phone held sideways</li>
+      </ul></div>
+    <div class="bp__c">
+      <p class="bp__w">720 px</p><p class="bp__t">Schedule</p>
+      <div class="frame" style="height:120px;width:112px;margin-bottom:6px"></div>
+      <ul class="bp__l">
+        <li>Sustainability claims become a three-column schedule: 16 ch label, 62 ch answer, detail drawing</li>
+        <li>16 ch holds "Air and noise" without wrapping, so every answer starts level</li>
+        <li>Vignettes capped by <em>height</em> at 130 px, not width — five different aspects, one baseline</li>
+      </ul></div>
+    <div class="bp__c">
+      <p class="bp__w">860 px · 1100 px</p><p class="bp__t">Two columns</p>
+      <div class="frame" style="height:120px;width:170px;margin-bottom:6px"></div>
+      <ul class="bp__l">
+        <li>860: layer body splits 5 fr / 7 fr, prose against plate; alternating layers flip the order</li>
+        <li>860: nav gains its metadata block; hero spec becomes three centred fields inset to track the headline</li>
+        <li>860: founders become three cells</li>
+        <li>1100: the claims schedule pairs into two columns, halving the section's scroll depth</li>
+      </ul></div>
+  </div>
+
+  <p class="m" style="margin-top:38px;padding-bottom:14px">Preference queries — three, and each one changes behaviour rather than removing it</p>
+  <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="card"><span class="card__k">prefers-reduced-motion</span><span class="card__v">Gentler, not silent</span>
+      <span class="card__d">Transform and position are stripped; colour and opacity feedback keeps its
+        authored timing, because press feedback is not what causes discomfort — movement is. The video is
+        replaced by its own poster frame, and the headline still turns, crossfading in place, because the
+        word carries meaning rather than decoration.</span></div>
+    <div class="card"><span class="card__k">prefers-reduced-transparency</span><span class="card__v">Opaque chrome</span>
+      <span class="card__d">The bar's 97% white becomes solid white when the reader has asked for less
+        translucency.</span></div>
+    <div class="card"><span class="card__k">print</span><span class="card__v">A4 landscape drawing set</span>
+      <span class="card__d">One layer per sheet, the bar relocated into the bottom margin as a repeating
+        title block, the dark section printed on white, and every revealed element forced visible — which
+        also fixes a real defect, since printing on load would otherwise produce a near-blank document.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 09 · Responsive behaviour</span>
+    <span class="m">Frames indicative, not to scale</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     10 · ASSET PIPELINE
+     ================================================================== -->
+<section class="sheet" id="d10" style="min-height:700px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 10 · Image and asset pipeline</p>
+      <h2 class="sheet__t" style="margin-top:12px">Optimised once, at authoring time, and then never again.</h2>
+      <p class="sheet__sub">With no build step and no image CDN, every optimisation has to be baked into the
+        committed artefact. The master renders — 5.0 to 7.6&nbsp;MB PNGs — stay in the repository as working
+        material and are excluded from what is served.</p>
+    </div>
+    <p class="m">7 plates · 5 vignettes</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain__n"><span class="chain__i">01 · Author</span><span class="chain__t">Master render</span>
+      <span class="chain__d">PNG at 3,000–4,000 px, 5.0–7.6 MB each. True 30° isometric, one line weight
+        family, one neutral ramp, trade colour applied per system.</span>
+      <span class="m" style="margin-top:6px">assets/draw/_src/ · git-ignored from the served tree</span></div>
+    <div class="chain__n"><span class="chain__i">02 · Encode</span><span class="chain__t">WebP, two densities</span>
+      <span class="chain__d">1× at 1,200–2,000 px and 2× at 2,400–4,000 px. The shipped plate drops from
+        ~7 MB to 81–216 KB — a 96–98% reduction with no visible loss on line art.</span>
+      <span class="m" style="margin-top:6px">81 KB – 216 KB per plate</span></div>
+    <div class="chain__n"><span class="chain__i">03 · Declare</span><span class="chain__t">srcset + sizes</span>
+      <span class="chain__d">Intrinsic <code>width</code> and <code>height</code> on every image so the box
+        is reserved before the bytes arrive and the layout never shifts. <code>sizes</code> states the real
+        column: 52 vw above 860 px, 100 vw below.</span>
+      <span class="m" style="margin-top:6px">CLS contribution: none</span></div>
+    <div class="chain__n"><span class="chain__i">04 · Defer</span><span class="chain__t">lazy + async</span>
+      <span class="chain__d"><code>loading="lazy"</code> and <code>decoding="async"</code> on all twelve
+        drawings, so only the plates near the viewport are fetched. Eight of the nineteen requests never
+        happen for a reader who does not scroll.</span>
+      <span class="m" style="margin-top:6px">8 requests · 607 KB on first view</span></div>
+    <div class="chain__n"><span class="chain__i">05 · Serve</span><span class="chain__t">Static origin</span>
+      <span class="chain__d">One origin, no transform service, no signed URLs. The browser picks the density;
+        the server does nothing but send bytes and set cache headers.</span>
+      <span class="m" style="margin-top:6px">19 requests · 2,019 KB complete</span></div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-top:44px">
+    <div class="card"><span class="card__k">Fonts</span><span class="card__v">Two files, preloaded</span>
+      <span class="card__d">Variable WOFF2, self-hosted, <code>rel=preload</code> in the head and
+        <code>font-display: swap</code>. 113.6 KB covers every weight and width the page uses.</span></div>
+    <div class="card"><span class="card__k">Video</span><span class="card__v">WebM first, MP4 fallback</span>
+      <span class="card__d">413 KB and 448 KB. Only one is ever fetched — measurement confirms WebM wins and
+        MP4 is never requested by a modern browser.</span></div>
+    <div class="card"><span class="card__k">Favicon</span><span class="card__v">Inline data URI</span>
+      <span class="card__d">The mark is the plan of one hall on the isometric, written as an SVG data URI in
+        the head. Costs no request and survives every size the browser asks for.</span></div>
+    <div class="card"><span class="card__k">Social card</span><span class="card__v">Absolute og:image</span>
+      <span class="card__d">1200×630, the four-stage phasing plate. Absolute because scrapers do not resolve
+        relative paths — a relative URL yields a preview card with no image at all.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 10 · Image and asset pipeline</span>
+    <span class="m">Sizes measured from the shipped files</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     11 · DEPLOYMENT ARCHITECTURE
+     ================================================================== -->
+<section class="sheet" id="d11" style="min-height:880px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 11 · Deployment architecture</p>
+      <h2 class="sheet__t" style="margin-top:12px">Author → commit → upload → serve. There is no build stage to fail.</h2>
+      <p class="sheet__sub">Because the repository contains the finished artefact, deployment is a file copy
+        and rollback is a file copy in the other direction. This is what removes the entire class of
+        deployment failures that dominate framework-based sites.</p>
+    </div>
+    <p class="m">Hostinger · shared or business</p>
+  </div>
+
+  <div class="chain">
+    <div class="chain__n"><span class="chain__i">Local</span><span class="chain__t">Author</span>
+      <span class="chain__d">Edit index.html, style.css, script.js. Open the file directly — the site runs
+        from <code>file://</code> with no server at all.</span></div>
+    <div class="chain__n"><span class="chain__i">git</span><span class="chain__t">Commit</span>
+      <span class="chain__d">The commit is the release. Working material — master renders, candidates,
+        the archive — is git-ignored and never reaches the host.</span></div>
+    <div class="chain__n"><span class="chain__i">Transfer</span><span class="chain__t">Deploy</span>
+      <span class="chain__d">hPanel Git deploy, or SFTP, or the File Manager. Target is
+        <code>public_html/</code>. Roughly 6.5 MB, one directory.</span></div>
+    <div class="chain__n"><span class="chain__i">Origin</span><span class="chain__t">LiteSpeed</span>
+      <span class="chain__d">Serves static files, terminates TLS, applies the <code>.htaccess</code> cache
+        and compression rules. No PHP process is involved in any request.</span></div>
+    <div class="chain__n"><span class="chain__i">Edge</span><span class="chain__t">CDN + browser</span>
+      <span class="chain__d">Immutable one-year cache on hashed-by-content assets, short revalidation on the
+        three source files. Repeat views cost one conditional request.</span></div>
+  </div>
+
+  <p class="m" style="margin-top:44px;padding-bottom:16px">What is not in this diagram, and why that matters</p>
+  <div class="grid" style="grid-template-columns:repeat(5,1fr)">
+    <div class="card"><span class="card__k">Absent</span><span class="card__v">Node runtime</span>
+      <span class="card__d">Nothing executes on the server. Shared hosting is therefore sufficient, not a compromise.</span></div>
+    <div class="card"><span class="card__k">Absent</span><span class="card__v">Build step</span>
+      <span class="card__d">No install, no compile, no cache to warm. A deploy cannot fail because a
+        transitive dependency changed.</span></div>
+    <div class="card"><span class="card__k">Absent</span><span class="card__v">Environment variables</span>
+      <span class="card__d">No secrets exist. There is nothing to leak into a client bundle and nothing to
+        configure per environment.</span></div>
+    <div class="card"><span class="card__k">Absent</span><span class="card__v">Database</span>
+      <span class="card__d">No backup strategy beyond the files themselves, and no migration to get wrong.</span></div>
+    <div class="card"><span class="card__k">Absent</span><span class="card__v">API surface</span>
+      <span class="card__d">The only outbound action on the page is a <code>mailto:</code> link. The attack
+        surface is the file server.</span></div>
+  </div>
+
+  <p class="m" style="margin-top:40px;padding-bottom:14px">Rollback</p>
+  <div class="rulelist" style="max-width:none">
+    <div><dt>Mechanism</dt><dd><code>git checkout &lt;previous tag&gt;</code> and re-upload, or restore the
+      previous <code>public_html</code> from a Hostinger snapshot. Both are complete: there is no partially
+      migrated state a static site can be left in.</dd></div>
+    <div><dt>Time to restore</dt><dd>Under two minutes by file transfer; under ten by panel snapshot.</dd></div>
+    <div><dt>Blast radius</dt><dd>One directory. No dependent service, no queue to drain, no cache to
+      invalidate beyond the CDN purge.</dd></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 11 · Deployment architecture</span>
+    <span class="m">Applies to any static host, not only Hostinger</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     12 · HOSTING ARCHITECTURE / PLAN FIT
+     ================================================================== -->
+<section class="sheet sheet--wide" id="d12" style="min-height:860px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 12 · Hosting architecture</p>
+      <h2 class="sheet__t" style="margin-top:12px">The site's requirements against what each Hostinger tier provides.</h2>
+      <p class="sheet__sub">The requirement list is unusually short, which is the point: the only genuine
+        requirements are TLS, a static file server, correct MIME types for WOFF2 and WebP, and a cache
+        policy. Everything above shared hosting buys operational headroom, not capability.</p>
+    </div>
+    <p class="m">Assessment</p>
+  </div>
+
+  <table>
+    <thead><tr><th style="width:190px">Requirement</th><th style="width:110px">Needed</th>
+      <th style="width:150px">Shared</th><th style="width:150px">Business</th>
+      <th style="width:150px">Cloud</th><th style="width:150px">VPS</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td><b>Static file serving</b></td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td>
+        <td>The entire runtime requirement.</td></tr>
+      <tr><td><b>TLS certificate</b></td><td class="mono">Yes</td><td class="mono">Free, auto</td><td class="mono">Free, auto</td><td class="mono">Free, auto</td><td class="mono">Manual / Certbot</td>
+        <td>VPS is the only tier where this becomes your job.</td></tr>
+      <tr><td><b>WOFF2 + WebP MIME</b></td><td class="mono">Yes</td><td class="mono">Default</td><td class="mono">Default</td><td class="mono">Default</td><td class="mono">Configure</td>
+        <td>Verify once after first deploy; a wrong WOFF2 type silently falls back to Helvetica.</td></tr>
+      <tr><td><b>.htaccess cache + gzip</b></td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">nginx conf</td>
+        <td>The single highest-value configuration on the whole deployment.</td></tr>
+      <tr><td><b>CDN</b></td><td class="mono">Optional</td><td class="mono">—</td><td class="mono">Included</td><td class="mono">Included</td><td class="mono">Add Cloudflare</td>
+        <td>Meaningful for an India-hosted site with international lenders and tenants.</td></tr>
+      <tr><td><b>Daily backups</b></td><td class="mono">Optional</td><td class="mono">Weekly</td><td class="mono">Daily</td><td class="mono">Daily</td><td class="mono">Snapshots</td>
+        <td>Git is already the real backup; this is convenience.</td></tr>
+      <tr><td><b>Git deploy from panel</b></td><td class="mono">Optional</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td>
+        <td>Turns deployment into one button.</td></tr>
+      <tr><td><b>Staging environment</b></td><td class="mono">Optional</td><td class="mono">—</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Build it</td>
+        <td>Worth having before the founders' names go live.</td></tr>
+      <tr><td><b>Node runtime</b></td><td class="mono" style="color:var(--live)">Not needed</td><td class="mono">—</td><td class="mono">—</td><td class="mono">—</td><td class="mono">Yes</td>
+        <td>Nothing in this project executes server-side.</td></tr>
+      <tr><td><b>PHP / MySQL</b></td><td class="mono" style="color:var(--live)">Not needed</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td><td class="mono">Yes</td>
+        <td>Present on every tier; used by none of this site.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="grid" style="grid-template-columns:repeat(4,1fr);margin-top:38px">
+    <div class="card" style="border-color:var(--live)">
+      <span class="card__k" style="color:var(--live)">Recommended</span>
+      <span class="card__v">Business Hosting</span>
+      <span class="card__d">Not because the site needs the capacity — it does not — but because the CDN,
+        daily backups and a staging environment are what an investor-facing page should have behind it
+        before names and figures go on it. The site itself would run on the entry tier unchanged.</span></div>
+    <div class="card"><span class="card__k">Sufficient</span><span class="card__v">Shared Hosting</span>
+      <span class="card__d">Genuinely sufficient. 6.5 MB of static files, no server process, no database.
+        Choose this if the page is a placeholder while the entity is being formed.</span></div>
+    <div class="card"><span class="card__k">Unnecessary</span><span class="card__v">Cloud Hosting</span>
+      <span class="card__d">Buys dedicated resources a static file server will never consume. Revisit only
+        if the site later grows an application.</span></div>
+    <div class="card"><span class="card__k">Counterproductive</span><span class="card__v">VPS</span>
+      <span class="card__d">Transfers TLS renewal, OS patching and web-server configuration to whoever
+        inherits this site. For a static page that is a liability, not control.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 12 · Hosting architecture</span>
+    <span class="m">Verify current tier specifications at purchase</span>
+  </div>
+</section>
+
+<!-- =====================================================================
+     13 · MEASURED CRITICAL PATH
+     ================================================================== -->
+<section class="sheet" id="d13" style="min-height:720px">
+  <div class="sheet__hd">
+    <div>
+      <p class="m">Diagram 13 · Measured critical path</p>
+      <h2 class="sheet__t" style="margin-top:12px">Eight requests to first view. Nothing on the path belongs to anyone else.</h2>
+      <p class="sheet__sub">Captured over a local origin at 1600×1000, so the absolute milliseconds describe
+        the work rather than a network. The structure of the waterfall is the finding: no blocking
+        third-party script, no font host, no framework runtime to parse before the first pixel.</p>
+    </div>
+    <p class="m">FCP 112 ms · DCL 140 ms</p>
+  </div>
+
+  <div style="margin-top:6px">
+    <div class="wf__r"><span class="wf__k">index.html</span><div class="wf__t"><div class="wf__b" style="width:6%"></div></div><span class="wf__s">37.8 KB</span></div>
+    <div class="wf__r"><span class="wf__k">style.css</span><div class="wf__t"><div class="wf__b" style="width:9%;margin-left:6%"></div></div><span class="wf__s">49.1 KB</span></div>
+    <div class="wf__r"><span class="wf__k">archivo.woff2 <em style="font-style:normal;color:var(--live)">preload</em></span><div class="wf__t"><div class="wf__b" style="width:13%;margin-left:6%"></div></div><span class="wf__s">88.3 KB</span></div>
+    <div class="wf__r"><span class="wf__k">azeret.woff2 <em style="font-style:normal;color:var(--live)">preload</em></span><div class="wf__t"><div class="wf__b" style="width:8%;margin-left:6%"></div></div><span class="wf__s">25.9 KB</span></div>
+    <div class="wf__r"><span class="wf__k">script.js <em style="font-style:normal;color:var(--grey)">defer</em></span><div class="wf__t"><div class="wf__b" data-def style="width:9%;margin-left:6%"></div></div><span class="wf__s">45.8 KB</span></div>
+    <div class="wf__r"><span class="wf__k">ops-poster.jpg</span><div class="wf__t"><div class="wf__b" data-def style="width:7%;margin-left:15%"></div></div><span class="wf__s">30.9 KB</span></div>
+    <div class="wf__r"><span class="wf__k">foundation.webp <em style="font-style:normal;color:var(--grey)">lazy</em></span><div class="wf__t"><div class="wf__b" data-def style="width:16%;margin-left:19%"></div></div><span class="wf__s">155.8 KB</span></div>
+    <div class="wf__r"><span class="wf__k">power.webp <em style="font-style:normal;color:var(--grey)">lazy</em></span><div class="wf__t"><div class="wf__b" data-def style="width:19%;margin-left:19%"></div></div><span class="wf__s">210.8 KB</span></div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(5,1fr);margin-top:46px">
+    <div class="card"><span class="card__k">Requests</span><span class="card__v">8 → 19</span>
+      <span class="card__d">First view, then after scrolling every section.</span></div>
+    <div class="card"><span class="card__k">Transfer</span><span class="card__v">607 KB → 2,019 KB</span>
+      <span class="card__d">Of which 413 KB is the operations clip, fetched only if Layer 06 is reached.</span></div>
+    <div class="card"><span class="card__k">Third party</span><span class="card__v">0 requests</span>
+      <span class="card__d">One origin serves everything. No CDN script, no font host, no analytics.</span></div>
+    <div class="card"><span class="card__k">DOM</span><span class="card__v">372 nodes</span>
+      <span class="card__d">Across 9,852 px. Style recalculation is cheap because there is so little of it.</span></div>
+    <div class="card"><span class="card__k">Main thread</span><span class="card__v">1 scroll listener</span>
+      <span class="card__d">rAF-coalesced, passive, and does not bind at all where the CSS scroll timeline
+        is supported. Everything else is IntersectionObserver.</span></div>
+  </div>
+
+  <div class="sheet__ft">
+    <span class="m">Diagram 13 · Measured critical path</span>
+    <span class="m">Chromium 1600×1000 · local origin · bar widths indicative</span>
+  </div>
+</section>
+
+</body>
+</html>
