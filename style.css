@@ -642,16 +642,41 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
    `drawn by` or `checked by` is set on a sheet, and the name fills the field.
    Stacked on narrow screens, where three columns would leave each name on its
    own line and the box taller than its contents. */
+/* Tall cards: the number at the head, the person at the foot, and the space
+   between left empty. That emptiness is the whole device — it is what makes a
+   card read as composed rather than as a box with text in it.
+
+   A card here is still a title block. The reference this came from is a rounded
+   gradient tile with an icon; none of that survives contact with a page made of
+   hairlines on white, so what carries over is the structure — numbered, tall,
+   weighted to the bottom — and not the surface. No radius, no gradient, no
+   shadow, no hover lift, and no icon, because there is not one anywhere else in
+   the set.
+
+   Below the three-up breakpoint they become a swipeable rail rather than a
+   1350px stack. Scroll-snap does that natively: no carousel library, which
+   matters on a page that ships no dependencies and makes no external request.
+   The base state IS the rail, so the fallback for anything that cannot do the
+   three-column override is a horizontally scrollable list, not a broken grid. */
 .founders {
-  display: grid; gap: var(--s3);
-  grid-template-columns: 1fr;
   margin-top: var(--s6);
+  display: grid; gap: var(--s3);
+  grid-auto-flow: column; grid-auto-columns: 82%;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
 }
+.founders::-webkit-scrollbar { display: none; }
+
 .founders > li {
-  display: grid; align-content: start; gap: var(--s2);
+  scroll-snap-align: start;
+  min-height: 450px;
+  display: flex; flex-direction: column; justify-content: space-between;
   border: 1px solid var(--rule);
   padding: var(--s3);
 }
+.founders__no { color: var(--grey); }
+.founders__foot { display: grid; gap: var(--s2); }
 .founders__r {
   color: var(--grey);
   padding-bottom: var(--s2);
@@ -661,7 +686,12 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
 .founders__b { color: var(--charcoal); text-wrap: pretty; }
 
 @media (min-width: 860px) {
-  .founders { grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+  .founders {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--s4);
+    overflow: visible;
+  }
 }
 .notes dt { font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.08em;
             text-transform: uppercase; color: var(--grey); }
