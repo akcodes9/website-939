@@ -812,12 +812,17 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
        1100 up to where --page stops growing — plus the 62px of gap, rule and
        caption line beneath it, which came to 485.
 
-       450 is a chosen number rather than that derived one — close enough to a
-       drawing layer to still sit in the set, a little under it so the dark
-       section is not the tallest thing on the page. Held as a clamp so narrow
-       viewports get a proportionate band instead of a fixed slab: 30vw governs
-       up to about 1500, and the 450 cap takes over above it. */
-    min-height: clamp(300px, 30vw, 450px);
+       420 is a chosen number rather than that derived one — a little under a
+       drawing layer so the dark section is not the tallest thing on the page.
+
+       Note this is the BODY, not the black band. The band is this plus the
+       section padding and the two-line headline above it, so 420 here shows as
+       roughly 750px of black at 1512. The band cannot go below about 525px at
+       that width whatever this value is: padding and heading account for 283
+       of it, and the notes block sets a 193px floor under the rest. Held as a
+       clamp so narrow viewports get a proportionate band rather than a fixed
+       slab — 28vw governs to about 1500, the 420 cap above it. */
+    min-height: clamp(300px, 28vw, 420px);
     align-content: center;
   }
   .layer--flip .layer__body > :first-child { order: 2; }
