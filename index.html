@@ -547,15 +547,16 @@
       <p class="layer__idx" data-in><span class="m">Layer 09</span><span class="m">Founders</span></p>
       <h2 class="h1" data-in>The names on the drawing.</h2>
     </div>
-    <div class="layer__body">
-      <div>
-        <p class="body" data-in>
-          Every sheet in a set carries the names of the people answerable for
-          it — drawn by, checked by, approved by. A campus that does not exist
-          yet is a promise, and a promise is only worth the people who made it.
-          These are ours.
-        </p>
-      </div>
+    <!-- Not .layer__body. That is a 5fr/7fr split for prose against a drawing,
+         and three cards squeezed into the 7fr column would each be about 240px
+         wide. The paragraph carries its own measure from .body, so it does not
+         need a column to be readable, and the cards get the full width. -->
+    <p class="body" data-in>
+      Every sheet in a set carries the names of the people answerable for
+      it — drawn by, checked by, approved by. A campus that does not exist
+      yet is a promise, and a promise is only worth the people who made it.
+      These are ours.
+    </p>
 
       <!-- TODO(client): THREE PLACEHOLDERS. No person is named below, and none
            may be invented — a fabricated founder is the one error on this page
@@ -574,25 +575,24 @@
            Add or remove list items freely; the layout takes any number. -->
       <ol class="founders" data-in>
         <li>
+          <p class="m founders__r">Chief executive officer</p>
           <p class="founders__n">To be announced</p>
-          <p class="m founders__r">Founder</p>
           <p class="founders__b">One sentence on what they have delivered before,
              in numbers rather than adjectives.</p>
         </li>
         <li>
+          <p class="m founders__r">Chief financial officer</p>
           <p class="founders__n">To be announced</p>
-          <p class="m founders__r">Founder</p>
           <p class="founders__b">One sentence on what they have delivered before,
              in numbers rather than adjectives.</p>
         </li>
         <li>
+          <p class="m founders__r">Chief technology officer</p>
           <p class="founders__n">To be announced</p>
-          <p class="m founders__r">Founder</p>
           <p class="founders__b">One sentence on what they have delivered before,
              in numbers rather than adjectives.</p>
         </li>
       </ol>
-    </div>
   </section>
 
   <!-- ======================================================================

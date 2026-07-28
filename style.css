@@ -636,16 +636,33 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
    cards. Cards would need portraits to justify themselves, and there is not a
    photograph anywhere in this set — the opening says so outright. A name, a
    role and one line is what a title block carries, and it is enough. */
-.founders { border-top: 1px solid var(--rule); }
+/* Three cells side by side. A card on this page is a title block, not a
+   product tile: a hairline box, no radius, no shadow, no lift on hover. The
+   role sits at the top as the field label with a rule under it, exactly as
+   `drawn by` or `checked by` is set on a sheet, and the name fills the field.
+   Stacked on narrow screens, where three columns would leave each name on its
+   own line and the box taller than its contents. */
+.founders {
+  display: grid; gap: var(--s3);
+  grid-template-columns: 1fr;
+  margin-top: var(--s6);
+}
 .founders > li {
-  display: grid; gap: var(--s1);
-  padding-block: var(--s3);
+  display: grid; align-content: start; gap: var(--s2);
+  border: 1px solid var(--rule);
+  padding: var(--s3);
+}
+.founders__r {
+  color: var(--grey);
+  padding-bottom: var(--s2);
   border-bottom: 1px solid var(--rule-2);
 }
-.founders > li:last-child { border-bottom: 0; }
 .founders__n { font-size: var(--t-h2); line-height: 1.12; letter-spacing: -0.02em; color: var(--black); }
-.founders__r { color: var(--grey); }
-.founders__b { color: var(--charcoal); max-width: 46ch; text-wrap: pretty; }
+.founders__b { color: var(--charcoal); text-wrap: pretty; }
+
+@media (min-width: 860px) {
+  .founders { grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+}
 .notes dt { font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.08em;
             text-transform: uppercase; color: var(--grey); }
 .notes dd { font-family: var(--mono); font-size: var(--t-cap); color: var(--black); text-align: right; }
