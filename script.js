@@ -313,24 +313,50 @@
     /* ---- shaders ---------------------------------------------------------
        Point size attenuates with view depth, which is what gives the far side
        of the knot its finer grain and reads as depth without any shading. */
+    /* aU is the point's position along the knot, 0 to 1. Two charges travel
+       that length, and a point takes the live red as one passes over it. This
+       replaced a sixth of the cloud being permanently red at random: at three
+       pixels and 0.58 alpha, scattered red among grey is spatially averaged by
+       the eye back into grey, which is why the hero read as plain white. Colour
+       has to be gathered to be seen at all. Being carried by the same red the
+       status dot and the headline beam use, it states the structure is live
+       rather than tinting it. */
     var VERT =
       'attribute vec3 aPos;' +
       'attribute vec3 aCol;' +
+      'attribute float aU;' +
       'uniform mat4 uMVP;' +
       'uniform mat4 uMV;' +
       'uniform float uSize;' +
+      'uniform float uAlpha;' +
+      'uniform float uPulse;' +
+      'uniform vec3 uLive;' +
       'varying vec3 vCol;' +
+      'varying float vA;' +
       'void main(){' +
-      '  vCol = aCol;' +
+      /* Wrapped distance to the nearest charge. Doubling aU puts two on the
+         curve; min(ph, 1-ph) makes the falloff symmetric across the seam so
+         there is no hard edge where the phase rolls over. */
+      '  float ph = fract(aU * 2.0 - uPulse);' +
+      '  float d = min(ph, 1.0 - ph);' +
+      /* Written as 1 - smoothstep rather than with the edges swapped: GLSL
+         leaves smoothstep undefined when edge0 >= edge1, and most drivers do
+         the sane thing, which is exactly how that kind of bug survives to
+         someone else's GPU. */
+      '  float band = 1.0 - smoothstep(0.0, 0.075, d);' +
+      '  vCol = mix(aCol, uLive, band);' +
+      /* Lit points are also brighter and slightly larger. Colour alone at this
+         grain is still too fine to register. */
+      '  vA = min(1.0, uAlpha * (1.0 + band * 0.85));' +
       '  vec4 mv = uMV * vec4(aPos, 1.0);' +
       '  gl_Position = uMVP * vec4(aPos, 1.0);' +
-      '  gl_PointSize = max(1.0, uSize / max(0.001, -mv.z));' +
+      '  gl_PointSize = max(1.0, uSize * (1.0 + band * 0.55) / max(0.001, -mv.z));' +
       '}';
     var FRAG =
       'precision mediump float;' +
       'varying vec3 vCol;' +
-      'uniform float uAlpha;' +
-      'void main(){ gl_FragColor = vec4(vCol, uAlpha); }';
+      'varying float vA;' +
+      'void main(){ gl_FragColor = vec4(vCol, vA); }';
 
     function compile(type, src) {
       var s = gl.createShader(type);
@@ -347,10 +373,13 @@
 
     var aPos = gl.getAttribLocation(prog, 'aPos');
     var aCol = gl.getAttribLocation(prog, 'aCol');
+    var aU = gl.getAttribLocation(prog, 'aU');
     var uMVP = gl.getUniformLocation(prog, 'uMVP');
     var uMV = gl.getUniformLocation(prog, 'uMV');
     var uSize = gl.getUniformLocation(prog, 'uSize');
     var uAlpha = gl.getUniformLocation(prog, 'uAlpha');
+    var uPulse = gl.getUniformLocation(prog, 'uPulse');
+    var uLive = gl.getUniformLocation(prog, 'uLive');
 
     /* ---- the knot --------------------------------------------------------
        The same parametric (2,3) torus knot Three generates: a curve, then a
@@ -372,6 +401,7 @@
     var home = new Float32Array(N * 3);   /* the knot — what the spring returns to */
     var vel  = new Float32Array(N * 3);
     var col  = new Float32Array(N * 3);
+    var uarr = new Float32Array(N);       /* position along the knot, 0 to 1 */
 
     (function build() {
       var p1 = [0, 0, 0], p2 = [0, 0, 0];
@@ -402,15 +432,11 @@
           home[i3 + 1] = pos[i3 + 1] = p1[1] + (cx * Nv[1] + cy * B[1]);
           home[i3 + 2] = pos[i3 + 2] = p1[2] + (cx * Nv[2] + cy * B[2]);
 
-          /* Graphite, with roughly a sixth in the live red. Colour on this page
-             states a condition rather than decorating, so the accent stays a
-             minority and nothing else is tinted at all. */
-          if (Math.random() < 0.16) {
-            col[i3] = 0.839; col[i3 + 1] = 0.212; col[i3 + 2] = 0.043;   /* #D6360B */
-          } else {
-            g = 0.07 + Math.random() * 0.13;
-            col[i3] = g; col[i3 + 1] = g; col[i3 + 2] = g;
-          }
+          /* Graphite only. All the red now arrives with the travelling charge,
+             which is the one thing at this grain that can actually be seen. */
+          g = 0.07 + Math.random() * 0.13;
+          col[i3] = g; col[i3 + 1] = g; col[i3 + 2] = g;
+          uarr[k] = i / TUBULAR;
           k++;
         }
       }
@@ -455,6 +481,14 @@
     gl.bufferData(gl.ARRAY_BUFFER, col, gl.STATIC_DRAW);
     gl.enableVertexAttribArray(aCol);
     gl.vertexAttribPointer(aCol, 3, gl.FLOAT, false, 0, 0);
+
+    var uBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, uBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, uarr, gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(aU);
+    gl.vertexAttribPointer(aU, 1, gl.FLOAT, false, 0, 0);
+
+    gl.uniform3f(uLive, 0.839, 0.212, 0.043);   /* #D6360B, the page's one accent */
 
     gl.disable(gl.DEPTH_TEST);
     gl.enable(gl.BLEND);
@@ -597,6 +631,9 @@
       gl.uniformMatrix4fv(uMV, false, mv);
       gl.uniform1f(uSize, SIZE);
       gl.uniform1f(uAlpha, 0.58);
+      /* One lap in ~9s. Slower than it wants to be, so it reads as something
+         running through the structure rather than as a chase light. */
+      gl.uniform1f(uPulse, (now * 0.00011) % 1);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
       gl.bufferSubData(gl.ARRAY_BUFFER, 0, pos);
