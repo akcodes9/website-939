@@ -785,6 +785,24 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
   }
   .hero__spec > div { padding: 0; border-left: 0; }
   .layer__body { grid-template-columns: 5fr 7fr; gap: var(--s7); align-items: start; }
+
+  /* Operations is the only layer carrying no plate, so its body ran about 420px
+     shorter than every other one and the single dark interval on the page read
+     as a thin band rather than an event — the video had almost no frame to be
+     seen in either. The floor is the plate's own height, the 7fr column at
+     1800x1005, so the black matches a drawing layer at every width rather than
+     sitting at a guessed number: 303px against 308 at 1100, 417 against 423 at
+     1512, and both flat past 1560 where --page stops growing.
+
+     align-content centres the row in that taller body. Without it the copy
+     would clamp to the top and the height would arrive as dead black. */
+  .invert .layer__body {
+    /* Plate height plus the 62px its figcaption occupies below it — the gap,
+       the rule and the caption line. Matching the drawing alone still left the
+       black about 55px short of every neighbouring layer. */
+    min-height: calc(clamp(280px, 28vw, 430px) + 62px);
+    align-content: center;
+  }
   .layer--flip .layer__body > :first-child { order: 2; }
 }
 
