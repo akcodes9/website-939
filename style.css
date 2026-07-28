@@ -672,6 +672,21 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   }
 }
 
+/* The corner of a drawing sheet. Ruled cells, mono both sides, values hard
+   right — the same construction as .notes, but boxed, because a title block is
+   a bounded object on a sheet rather than a list running to the margin. It sits
+   at the foot of the heading so the section opens with the statement and the
+   block that statement is about, side by side. */
+.tblock { border: 1px solid var(--rule); }
+.tblock > div {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--s3);
+  padding: 9px var(--s2);
+  border-bottom: 1px solid var(--rule-2);
+}
+.tblock > div:last-child { border-bottom: 0; }
+.tblock dd { color: var(--black); text-align: right; }
+
 .founders {
   margin-top: var(--s6);
   display: grid; gap: var(--s3);
