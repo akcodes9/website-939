@@ -802,7 +802,7 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
        has no caption to carry, so it stops at the image and lands a little
        under its neighbours — around 88% of them — which is what keeps the dark
        interval from reading as the tallest thing on the page. */
-    min-height: clamp(280px, 28vw, 430px);
+    min-height: clamp(220px, 21vw, 330px);
     align-content: center;
   }
   .layer--flip .layer__body > :first-child { order: 2; }
