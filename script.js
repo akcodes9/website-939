@@ -49,6 +49,11 @@
     wrap.hidden = false;
 
     var DUR = 4200;
+    /* The drawing is the ground the name stands on, so it is drawn back. At
+       full strength the wireframe and the wordmark competed and the eye had
+       nowhere to land first; the type has to be the thing in front. Every alpha
+       in the scene is multiplied by this, so the balance is one number. */
+    var DIM = 0.42;
     var COS = Math.cos(Math.PI / 6), SIN = Math.sin(Math.PI / 6);   /* true 30° */
     var W = 0, H = 0, S = 1;
 
@@ -68,9 +73,11 @@
       { z: 2.30, kind: 'roof'  }    /* roof plant  */
     ];
     /* The projection centres on z = 0, so a stack this tall would hang off the
-       top of the frame. Offsetting by half its height centres the assembly
-       itself rather than its base. */
-    var MID = LAYERS[LAYERS.length - 1].z / 2;
+       top of the frame. Half the stack height centres the PLATES — but the
+       ground grid reaches further below than the top plate reaches above, so
+       that left the whole drawing sitting low in the frame. Balanced against
+       the grid instead: (top + plate half - reach) / 2. */
+    var MID = 0.825;
 
     function size() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -78,7 +85,7 @@
       W = r.width; H = r.height;
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      S = Math.min(W, H) * 0.235;
+      S = Math.min(W, H) * 0.215;
     }
 
     /* Isometric projection. One function, used for every point drawn. */
@@ -96,7 +103,7 @@
 
     function plate(z, k, alpha) {
       var h = 0.5;   /* half-footprint */
-      ctx.globalAlpha = alpha;
+      ctx.globalAlpha = alpha * DIM;
 
       /* The plate edge, at full weight. Everything drawn inside it afterwards
          is lighter, so six planes read as six even where they overlap — at one
@@ -113,7 +120,7 @@
          meant to be. They stand up now: the equipment is drawn as small boxes
          with height, so a plate reads as a floor with plant on it. Same
          footprint, same stack, same silhouette — only the content changed. */
-      ctx.globalAlpha = alpha * 0.78;
+      ctx.globalAlpha = alpha * 0.78 * DIM;
       ctx.beginPath();
       var i, j, u, v;
 
@@ -197,9 +204,9 @@
       /* the ground grid, drawing outward from the origin */
       var g = span(t, 0, 0.16);
       if (g > 0) {
-        ctx.globalAlpha = 0.16 * (1 - span(t, 0.62, 0.9) * 0.55);
+        ctx.globalAlpha = 0.16 * (1 - span(t, 0.62, 0.9) * 0.55) * DIM;
         ctx.beginPath();
-        var reach = 1.5 * g;
+        var reach = 1.15 * g;
         for (var i = -6; i <= 6; i++) {
           var u = i * 0.25;
           if (Math.abs(u) > reach) { continue; }
@@ -224,7 +231,7 @@
       /* the construction lines, once there is something to connect */
       var c = span(t, 0.46, 0.86);
       if (c > 0) {
-        ctx.globalAlpha = 0.36 * c;
+        ctx.globalAlpha = 0.36 * c * DIM;
         ctx.setLineDash([3, 6]);
         ctx.beginPath();
         var corners = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]];

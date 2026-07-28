@@ -435,24 +435,31 @@ a { color: inherit; text-decoration: none; }
 .cine[hidden] { display: none; }
 .cine[data-leaving="true"] { opacity: 0; pointer-events: none; }
 .cine__c { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* The identity, centred over the assembly. */
+/* The identity, on the centre of the screen and on top of the drawing. It sat
+   above the assembly before, which pushed the drawing into the lower half and
+   left the two competing at equal weight — the wordmark should be the thing the
+   eye lands on, with the structure behind it. */
 .cine__id {
-  position: absolute; left: var(--gut); right: var(--gut);
-  top: clamp(48px, 7.5vh, 96px);
+  position: absolute; inset: 0; z-index: 1;
+  display: grid; place-content: center; justify-items: center;
   text-align: center; pointer-events: none;
-  animation: cine-id 1000ms var(--ease) 500ms both;
+  animation: cine-id 1100ms var(--ease) 450ms both;
 }
 .cine__mark {
   font-family: var(--mono); text-transform: uppercase;
-  font-size: clamp(15px, 1.5vw, 22px); letter-spacing: 0.34em;
+  font-size: clamp(24px, 3.4vw, 56px);
+  letter-spacing: 0.3em; text-indent: 0.3em;   /* the tracking is trailing, so put it back */
+  line-height: 1;
   color: var(--white);
 }
 .cine__tag {
   font-family: var(--mono); text-transform: uppercase;
-  font-size: var(--t-mono); letter-spacing: 0.16em;
-  color: var(--grey-2); margin-top: 12px;
+  font-size: clamp(10px, 0.86vw, 13px);
+  letter-spacing: 0.24em; text-indent: 0.24em;
+  color: rgba(255,255,255,0.62);
+  margin-top: 20px;
 }
-@keyframes cine-id { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes cine-id { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 
 /* Three equal tracks, so the state sits on the screen's centre line and not
    merely between whatever the two side items happen to measure. space-between
