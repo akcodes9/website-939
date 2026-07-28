@@ -797,10 +797,12 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
      align-content centres the row in that taller body. Without it the copy
      would clamp to the top and the height would arrive as dead black. */
   .invert .layer__body {
-    /* Plate height plus the 62px its figcaption occupies below it — the gap,
-       the rule and the caption line. Matching the drawing alone still left the
-       black about 55px short of every neighbouring layer. */
-    min-height: calc(clamp(280px, 28vw, 430px) + 62px);
+    /* The drawing's height, and not its caption's. A plate layer's body is the
+       image plus the 62px of gap, rule and caption line beneath it; this one
+       has no caption to carry, so it stops at the image and lands a little
+       under its neighbours — around 88% of them — which is what keeps the dark
+       interval from reading as the tallest thing on the page. */
+    min-height: clamp(280px, 28vw, 430px);
     align-content: center;
   }
   .layer--flip .layer__body > :first-child { order: 2; }
