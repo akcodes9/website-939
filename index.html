@@ -545,18 +545,26 @@
   <section class="layer wrap" id="l09">
     <div class="layer__head">
       <p class="layer__idx" data-in><span class="m">Layer 09</span><span class="m">Founders</span></p>
-      <h2 class="h1" data-in>The names on the drawing.</h2>
+
+      <!-- Every other layer sets prose against a drawing in the 7fr column.
+           This one has no drawing, so the paragraph sat under the heading at
+           its own 58ch measure with the whole right half of the page blank.
+           Pairing it with the heading instead fills the width and reads as a
+           statement and its qualification, which is what the two are.
+
+           Not .layer__body: that split is built for a plate, and three cards
+           squeezed into its 7fr column would be about 240px each. The cards
+           take the full width below. -->
+      <div class="founders__intro">
+        <h2 class="h1" data-in>The names on the drawing.</h2>
+        <p class="body" data-in>
+          Every sheet in a set carries the names of the people answerable for
+          it — drawn by, checked by, approved by. A campus that does not exist
+          yet is a promise, and a promise is only worth the people who made it.
+          These are ours.
+        </p>
+      </div>
     </div>
-    <!-- Not .layer__body. That is a 5fr/7fr split for prose against a drawing,
-         and three cards squeezed into the 7fr column would each be about 240px
-         wide. The paragraph carries its own measure from .body, so it does not
-         need a column to be readable, and the cards get the full width. -->
-    <p class="body" data-in>
-      Every sheet in a set carries the names of the people answerable for
-      it — drawn by, checked by, approved by. A campus that does not exist
-      yet is a promise, and a promise is only worth the people who made it.
-      These are ours.
-    </p>
 
       <!-- TODO(client): THREE PLACEHOLDERS. No person is named below, and none
            may be invented — a fabricated founder is the one error on this page

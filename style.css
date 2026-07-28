@@ -658,6 +658,20 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
    matters on a page that ships no dependencies and makes no external request.
    The base state IS the rail, so the fallback for anything that cannot do the
    three-column override is a horizontally scrollable list, not a broken grid. */
+/* Heading and its qualification on one line, so the section opens at full
+   measure instead of leaving the right half of the page blank. `end` sets the
+   paragraph on the heading's last baseline rather than floating it at the top
+   of a much taller cell. 7fr/5fr is the plate split reversed — prose is the
+   narrower column here because it is the supporting half, not the subject. */
+.founders__intro { display: grid; gap: var(--s4); }
+@media (min-width: 860px) {
+  .founders__intro {
+    grid-template-columns: 7fr 5fr;
+    gap: var(--s7);
+    align-items: end;
+  }
+}
+
 .founders {
   margin-top: var(--s6);
   display: grid; gap: var(--s3);
