@@ -787,15 +787,12 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   .claims .claims__a { grid-area: text; }
   .claims__f { grid-area: fig; justify-self: end; }
 
-  /* Five into two columns leaves the last one beside a hole, so it runs the
-     full width and keeps the original three-field arrangement — which reads as
-     the schedule closing rather than as a row that failed to pair. */
-  .claims > div:last-child {
-    grid-column: 1 / -1;
-    grid-template-columns: 16ch minmax(0, 62ch) 1fr;
-    grid-template-areas: "label text fig";
-    align-items: center;
-  }
+  /* The fifth row stays a normal cell and the column beside it is simply empty.
+     It ran full width before, on the theory that a row spanning the measure
+     reads as the schedule closing — it does not. Stretched across the page the
+     label, the answer and the drawing end up separated by voids the paired rows
+     never show, and the last row looks broken rather than final. A schedule
+     that ends short is ordinary; a row with its own layout is not. */
 }
 
 /* The dark interval. One section inverts, where the machine is running rather
