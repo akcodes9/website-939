@@ -1,0 +1,11 @@
+# macOS
+.DS_Store
+
+# Local editor / tooling config, specific to one machine
+.claude/
+
+# Working material. None of this is served — the site loads only the files
+# referenced from index.html — and together it is ~125MB against a 6.5MB site.
+Draft2.zip
+assets/draw/_src/
+assets/draw/_candidates/

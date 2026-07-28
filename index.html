@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="color-scheme" content="light">
+
+<title>Codex Space: the infrastructure beneath AI</title>
+<meta name="description" content="Codex Space engineers the physical foundation of artificial intelligence. A 550 MW AI campus at Hyderabad, Telangana, the first of a 3 GW programme, shown layer by layer.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Codex Space: the infrastructure beneath AI">
+<meta property="og:description" content="A 550 MW AI campus at Hyderabad, shown layer by layer. The first of a 3 GW programme.">
+<!-- The four-stage phasing plate: the one drawing in the set that is already
+     landscape, and the one that says what the company is doing rather than
+     what it has. TODO(client): scrapers do not resolve relative paths — this
+     needs the absolute URL before launch. -->
+<meta property="og:image" content="assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Four isometric engineering drawings in a row: a bare graded platform, then one, two and four hall blocks with plant and perimeter added at each stage.">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- The mark is the plan of one hall on the isometric: the smallest piece of
+     the drawing that is still recognisably this drawing. Inline so it costs no
+     request, and vector so it survives every size the browser asks for. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23fff'/%3E%3Cg fill='none' stroke='%23000' stroke-width='1.6' stroke-linejoin='round'%3E%3Cpath d='M16 7l10 5.5L16 18 6 12.5z'/%3E%3Cpath d='M16 14l10 5.5L16 25 6 19.5z'/%3E%3C/g%3E%3C/svg%3E">
+
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/archivo.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/azeret.woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+
+<!-- Decided before first paint so the page is never briefly visible under the
+     opening. Everything it sets is cosmetic: blocked, the attribute is absent,
+     the sequence never runs and the page is simply the page. The failsafe
+     releases it if script.js fails to load after this ran. -->
+<script>
+(function () {
+  try {
+    var d = document.documentElement;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || location.hash) { return; }
+    d.setAttribute('data-cine', 'running');
+    setTimeout(function () {
+      if (d.getAttribute('data-cine') === 'running') { d.setAttribute('data-cine', 'done'); }
+    }, 9000);
+  } catch (e) {}
+}());
+</script>
+<script src="script.js" defer></script>
+</head>
+
+<body id="top">
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ==========================================================================
+     THE OPENING. Wireframe layers assemble on black, then the sheet turns
+     white and the site is already drawn on it.
+
+     Drawn in code rather than filmed: the whole page is a set of engineering
+     plates at a true 30-degree isometric, and generated video melts line
+     geometry. Computing the projection means the opening is the same drawing
+     as the rest of the site, moving — crisp at any size, and honest, because
+     nothing here is a photograph of a building that does not exist.
+     ======================================================================= -->
+<div class="cine" id="cine" role="dialog" aria-modal="true"
+     aria-label="Opening sequence" hidden>
+  <canvas class="cine__c" id="cine-c" aria-hidden="true"></canvas>
+  <p class="cine__meta" aria-hidden="true">
+    <span>Codex Space</span>
+    <span id="cine-state">Assembling</span>
+    <span>Hyderabad · 17.3850&deg;N 78.4867&deg;E</span>
+  </p>
+  <button class="cine__skip" id="cine-skip" type="button">Skip<span class="vh"> opening sequence</span></button>
+</div>
+
+<header class="nav" id="nav">
+  <div class="nav__row">
+    <a class="nav__mark" href="#top">Codex&nbsp;Space</a>
+
+    <!-- The title block, and the only wayfinding on the page. It names the
+         layer you are currently reading; pressed, it opens the register that
+         lists all ten. A drawing set works exactly this way — the corner block
+         identifies the sheet in your hands, the register on sheet 00 tells you
+         what else exists. The earlier nine-item rail failed because it was
+         permanent; a register you open is not in the margin at all. -->
+    <button class="nav__sheet" id="nav-sheet-btn" type="button"
+            aria-expanded="false" aria-controls="register">
+      <span class="m" id="nav-sheet">Layer 00 &middot; General arrangement</span>
+      <span class="nav__sheet-mk" aria-hidden="true"></span>
+      <span class="vh">Open drawing register</span>
+    </button>
+
+    <p class="nav__meta m">
+      <span>Hyderabad, Telangana</span>
+      <span class="m--live">In development</span>
+    </p>
+    <a class="link nav__cta" href="mailto:xyz@codexspace.ai?subject=Enquiry">Enquire</a>
+  </div>
+  <span class="nav__depth" id="nav-depth" aria-hidden="true"></span>
+
+  <!-- The register. Ten rows, the trade colour stated as a rule at the left of
+       each, and the drawing number on the right — which is where the two
+       numbering systems stop being confusing, because you can see them side by
+       side. Layers 06, 08 and 09 carry no plate and say so. -->
+  <nav class="register" id="register" aria-label="Drawing register" hidden>
+    <div class="register__in">
+      <p class="m register__cap">Drawing register &middot; 10 layers, 6 plates</p>
+      <ol class="register__list">
+        <li><a href="#hero"><span class="m register__n">00</span><span class="register__t">General arrangement</span><span class="m register__d">No plate</span></a></li>
+        <li><a href="#l01"><span class="m register__n">01</span><span class="register__t">Foundation</span><span class="m register__d">Dwg 01</span></a></li>
+        <li style="--sys:var(--sys-power)"><a href="#l02"><span class="m register__n">02</span><span class="register__t">Power</span><span class="m register__d">Dwg 02</span></a></li>
+        <li style="--sys:var(--sys-cooling)"><a href="#l03"><span class="m register__n">03</span><span class="register__t">Cooling</span><span class="m register__d">Dwg 03</span></a></li>
+        <li style="--sys:var(--sys-compute)"><a href="#l04"><span class="m register__n">04</span><span class="register__t">Compute</span><span class="m register__d">Dwg 04</span></a></li>
+        <li style="--sys:var(--sys-network)"><a href="#l05"><span class="m register__n">05</span><span class="register__t">Network</span><span class="m register__d">Dwg 05</span></a></li>
+        <li style="--sys:var(--live)"><a href="#l06"><span class="m register__n">06</span><span class="register__t">Operations</span><span class="m register__d">No plate</span></a></li>
+        <li><a href="#l07"><span class="m register__n">07</span><span class="register__t">Scale</span><span class="m register__d">Dwg 06</span></a></li>
+        <li><a href="#l08"><span class="m register__n">08</span><span class="register__t">Stewardship</span><span class="m register__d">No plate</span></a></li>
+        <li><a href="#l09"><span class="m register__n">09</span><span class="register__t">Expansion</span><span class="m register__d">No plate</span></a></li>
+      </ol>
+    </div>
+  </nav>
+</header>
+
+<!-- tabindex="-1" so the skip link actually moves focus here. Without it the
+     browser scrolls to #main and leaves focus on the document body, so the next Tab
+     returns the reader to the top of the page they just skipped. -->
+<main id="main" tabindex="-1">
+
+  <!-- ======================================================================
+       SHEET 00 — the whole machine, before it is taken apart.
+
+       One column on the centre axis. The exploded assembly used to sit beside
+       the type, which meant sheet 00 restated what the opening had just shown
+       and split the reader's attention two ways on the one screen that should
+       hold it. The machine gets taken apart over the nine sheets below; this
+       one is the title page, and a title page carries a title.
+       =================================================================== -->
+  <section class="hero" id="hero">
+    <!-- The weave is the only thing behind the type. aria-hidden because it
+         states nothing a reader needs — the spec below carries the content. -->
+    <canvas class="weave" id="weave" aria-hidden="true"></canvas>
+
+    <div class="hero__row wrap">
+      <p class="m" data-in>Layer 00 &middot; General arrangement</p>
+      <!-- The last word turns over. The rotator is aria-hidden and a static
+           copy sits beside it in the accessible tree, so the heading always
+           announces one settled sentence — a screen reader should not hear the
+           h1 rewrite itself every two and a half seconds. -->
+      <!-- The <br> is load-bearing. Without it the turning word shares a line
+           with the rest of the sentence, and because the two words are not the
+           same width, text-wrap:balance recomputes every break on every turn —
+           so `with` jumps lines twice every five seconds. A forced break makes
+           the two segments independent: the first never changes and never
+           moves, and only the word's own line re-centres as it trades. -->
+      <h1 class="mega hero__t" data-in>The future of AI begins with<br><span
+        class="rot" id="rot" aria-hidden="true"><span class="rot__w">infrastructure.</span></span><span
+        class="vh">infrastructure.</span></h1>
+      <p class="lead hero__lead" data-in>
+        Codex Space engineers the physical foundation that artificial
+        intelligence is created, trained and scaled on. This page is that
+        foundation, taken apart one layer at a time.
+      </p>
+    </div>
+
+    <!-- The spec sits on the fold as a ruled row, the way a title block sits
+         along the bottom of a sheet rather than inside the drawing. -->
+    <dl class="hero__spec wrap" data-in>
+      <div>
+        <dt class="m">First campus</dt>
+        <!-- TODO(client): 550 MW publication approval outstanding. -->
+        <dd>550 MW IT load</dd>
+      </div>
+      <div>
+        <dt class="m">Programme</dt>
+        <!-- TODO(client): a stated goal, not contracted capacity. -->
+        <dd>3 GW target</dd>
+      </div>
+      <div>
+        <dt class="m">Status</dt>
+        <dd class="m--live">Phase 01 ongoing</dd>
+      </div>
+    </dl>
+  </section>
+
+  <!-- ======================================================================
+       01 FOUNDATION
+       =================================================================== -->
+  <section class="layer wrap" id="l01">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 01</span><span class="m">Foundation</span></p>
+      <h2 class="h1" data-in>Everything above the slab depends on what is under it.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          Earthworks, pad foundations, service trenches and the roads a
+          construction programme will run on for years before anything above
+          ground is recognisable as a building. It is the least visible layer
+          and the one that cannot be revisited.
+        </p>
+        <dl class="notes" data-in style="margin-top:var(--s4)">
+          <div><dt>Scope</dt><dd>Land development &middot; civil works</dd></div>
+          <div><dt>Approvals</dt><dd>Geotechnical &middot; environmental</dd></div>
+          <div><dt>Sequence</dt><dd>Precedes all trades</dd></div>
+        </dl>
+      </div>
+      <figure class="plate" data-in>
+        <img src="assets/draw/foundation.webp"
+             srcset="assets/draw/foundation.webp 1800w, assets/draw/foundation@2x.webp 3600w"
+             sizes="(min-width: 860px) 52vw, 100vw"
+             width="1800" height="1005" loading="lazy" decoding="async"
+             alt="Isometric drawing of the groundworks read left to right as a construction sequence: a haul road with a compaction roller and graded stockpiles of fill; a benched cut-and-fill platform shown in section; pile caps at three stages, from open excavations with reinforcement cages standing in them to boxed formwork to stripped concrete; a reinforcement mat over blinding with edge shuttering and propping, ready for a slab pour; an open trench cut away to show a multi-way duct bank bedded in sand and running into a precast circular chamber; and the sectioned edge of a poured slab at a construction joint.">
+        <figcaption><span class="m">Dwg 01</span><span class="m">Foundation &middot; construction sequence</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       02 POWER
+       =================================================================== -->
+  <section class="layer wrap layer--flip" id="l02" data-sys style="--sys:var(--sys-power)">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 02</span><span class="m">Power</span></p>
+      <h2 class="h1" data-in>Grid to rack, procured as one chain.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          Power availability is the binding constraint on a campus of this
+          scale. It is settled before anything else can be. High-density
+          distribution for GPU-intensive workloads, and redundancy that holds
+          the chain when the grid does not.
+        </p>
+        <dl class="notes" data-in style="margin-top:var(--s4)">
+          <div><dt>Intake</dt><dd>HV gantry &middot; on-site substation</dd></div>
+          <div><dt>Conversion</dt><dd>Transformers &middot; switchgear</dd></div>
+          <div><dt>Continuity</dt><dd>UPS &middot; standby generation</dd></div>
+          <div><dt>Distribution</dt><dd>Busway, PDU, rack</dd></div>
+        </dl>
+      </div>
+      <figure class="plate" data-in>
+        <img src="assets/draw/power.webp"
+             srcset="assets/draw/power.webp 1800w, assets/draw/power@2x.webp 3600w"
+             sizes="(min-width: 860px) 52vw, 100vw"
+             width="1800" height="1005" loading="lazy" decoding="async"
+             alt="Isometric drawing of the power chain as one continuous run: incoming high-voltage gantry, substation with transformers, switchgear line-up, uninterruptible supply, standby generators, and busway feeding a rack line.">
+        <figcaption><span class="m">Dwg 02</span><span class="m">Power &middot; single line arrangement</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       03 COOLING
+       =================================================================== -->
+  <section class="layer wrap" id="l03" data-sys style="--sys:var(--sys-cooling)">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 03</span><span class="m">Cooling</span></p>
+      <h2 class="h1" data-in>Specified at design stage, not retrofitted.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          Cooling is the largest single draw an operator controls, which makes
+          it the first thing drawn rather than the last thing added. Liquid at
+          the die, a closed circuit, and loop chemistry planned across the life
+          of the asset instead of handled at commissioning.
+        </p>
+        <dl class="notes" data-in style="margin-top:var(--s4)">
+          <div><dt>Topologies</dt><dd>Direct-to-chip, rear-door, immersion</dd></div>
+          <div><dt>Circuit</dt><dd>Closed, chiller, heat exchanger</dd></div>
+          <div><dt>Water</dt><dd>Treatment &middot; plant protection</dd></div>
+        </dl>
+      </div>
+      <figure class="plate" data-in>
+        <img src="assets/draw/cooling.webp"
+             srcset="assets/draw/cooling.webp 1800w, assets/draw/cooling@2x.webp 3600w"
+             sizes="(min-width: 860px) 52vw, 100vw"
+             width="1800" height="1005" loading="lazy" decoding="async"
+             alt="Isometric drawing of a closed cooling circuit: chillers, cooling towers, pumps and a plate heat exchanger, a coolant distribution unit, and a magnified rack cutaway showing cold plates, all joined by one unbroken loop of pipework.">
+        <figcaption><span class="m">Dwg 03</span><span class="m">Cooling &middot; closed circuit</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       04 COMPUTE — the rack, exploded. The deepest cut on the page.
+       =================================================================== -->
+  <section class="layer wrap layer--flip" id="l04" data-sys style="--sys:var(--sys-compute)">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 04</span><span class="m">Compute</span></p>
+      <h2 class="h1" data-in>The smallest unit the whole campus is built around.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          Every layer above and below exists to keep this cabinet powered,
+          cooled and connected. Take it apart and the campus is legible:
+          chassis, cold plates, distribution strips, a rear door that is itself
+          a heat exchanger.
+        </p>
+        <dl class="notes" data-in style="margin-top:var(--s4)">
+          <div><dt>Workload</dt><dd>Training, inference, HPC</dd></div>
+          <div><dt>Density</dt><dd>Accelerated compute</dd></div>
+          <div><dt>Heat capture</dt><dd>At the die</dd></div>
+        </dl>
+      </div>
+      <figure class="plate" data-in>
+        <img src="assets/draw/rack.webp"
+             srcset="assets/draw/rack.webp 1200w, assets/draw/rack@2x.webp 2400w"
+             sizes="(min-width: 860px) 52vw, 100vw"
+             width="1200" height="1607" loading="lazy" decoding="async"
+             alt="Exploded isometric drawing of a single server cabinet: outer frame and side panels, server chassis sliding out, a rear-door heat exchanger hinged away, vertical power distribution strips, cable management arms, and cold plates lifted clear of the boards.">
+        <figcaption><span class="m">Dwg 04</span><span class="m">Rack &middot; exploded assembly</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       05 NETWORK
+       =================================================================== -->
+  <section class="layer wrap" id="l05" data-sys style="--sys:var(--sys-network)">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 05</span><span class="m">Network</span></p>
+      <h2 class="h1" data-in>Two routes that never share a trench.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          Training and inference move very large volumes. Route diversity has
+          to be secured in the ground early, while the trenches are still a
+          negotiation rather than a cost. A second path bought later is rarely
+          a second path at all.
+        </p>
+        <dl class="notes" data-in style="margin-top:var(--s4)">
+          <div><dt>Paths</dt><dd>Physically separate ducts</dd></div>
+          <div><dt>Handover</dt><dd>Independent meet-me rooms</dd></div>
+          <div><dt>Distribution</dt><dd>Cross-connect &middot; structured cabling</dd></div>
+        </dl>
+      </div>
+      <figure class="plate" data-in>
+        <img src="assets/draw/network.webp"
+             srcset="assets/draw/network.webp 1800w, assets/draw/network@2x.webp 3600w"
+             sizes="(min-width: 860px) 52vw, 100vw"
+             width="1800" height="1005" loading="lazy" decoding="async"
+             alt="Isometric drawing of fibre architecture: two physically separate duct routes entering from opposite corners to two independent meet-me rooms, then structured cabling distributing overhead on trays to four rack rows with cross-connect frames between them.">
+        <figcaption><span class="m">Dwg 05</span><span class="m">Network &middot; route diversity</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       06 OPERATIONS — the one tonal event. The machine running, not built.
+       =================================================================== -->
+  <section class="layer invert" id="l06" data-sys style="--sys:var(--live)">
+    <!-- The one sheet whose subject is something happening rather than something
+         arranged, and one of the four with no plate — so this fills a hole
+         instead of competing with a drawing. It claims a rack line at rest, not
+         an operations centre that does not exist yet.
+
+         No autoplay attribute and preload="none": nothing is fetched until the
+         section is actually approached, and playback is started by script only
+         when it is on screen. aria-hidden and tabindex="-1" because it states
+         nothing the notes below do not. -->
+    <video class="ops" id="ops" muted playsinline loop preload="none"
+           poster="assets/video/ops-poster.jpg" aria-hidden="true" tabindex="-1">
+      <source src="assets/video/ops.webm" type="video/webm">
+      <source src="assets/video/ops.mp4" type="video/mp4">
+    </video>
+    <div class="wrap">
+      <div class="layer__head">
+        <p class="layer__idx" data-in><span class="m">Layer 06</span><span class="m m--live">Operations</span></p>
+        <h2 class="h1" data-in>A facility is only as good as the shift running it at three in the morning.</h2>
+      </div>
+      <div class="layer__body">
+        <div>
+          <p class="body" data-in>
+            Power, thermal, network and security are observed from one place,
+            continuously. Reliability is structure, the way the systems were
+            drawn together, rather than a percentage in a service schedule.
+          </p>
+        </div>
+        <dl class="notes" data-in>
+          <div><dt>Command</dt><dd>Integrated NOC &middot; SOC</dd></div>
+          <div><dt>Physical</dt><dd>Perimeter, biometrics, CCTV</dd></div>
+          <div><dt>Cyber</dt><dd>SIEM &middot; threat detection</dd></div>
+          <div><dt>Coverage</dt><dd>Continuous</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       07 SCALE
+       =================================================================== -->
+  <section class="layer wrap" id="l07">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 07</span><span class="m">Scale</span></p>
+      <h2 class="h1" data-in>The most efficient megawatt is the one not yet built.</h2>
+      <p class="lead" data-in>
+        Modular build-out aligns capital with tenant ramp-up, so a hall is
+        never powered and cooled while it waits to be occupied.
+      </p>
+    </div>
+    <figure class="plate plate--wide" data-in>
+      <img src="assets/draw/expansion.webp"
+           srcset="assets/draw/expansion.webp 2000w, assets/draw/expansion@2x.webp 4000w"
+           sizes="100vw" width="2000" height="848" loading="lazy" decoding="async"
+           alt="Four isometric drawings in a row showing modular expansion: a bare graded platform; one hall block with a substation; two hall blocks with thermal plant; four hall blocks with full plant and perimeter.">
+      <figcaption>
+        <span class="m">Dwg 06</span>
+        <span class="m">Expansion &middot; four stages</span>
+        <span class="m m--live">Stage 01 ongoing</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- ======================================================================
+       08 STEWARDSHIP
+       =================================================================== -->
+  <section class="layer wrap" id="l08">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 08</span><span class="m">Stewardship</span></p>
+      <h2 class="h1" data-in>A data centre is judged by what it consumes.</h2>
+    </div>
+    <div class="layer__body">
+      <div>
+        <p class="body" data-in>
+          That is the right question to ask of this industry, and it is the one
+          this campus is designed around rather than defended against. Cooling
+          drawn first, water planned across twenty years, nothing energised
+          before it is needed, and a site chosen where the grid can already
+          carry it.
+        </p>
+      </div>
+      <!-- TODO(client): PUE, WUE, renewable sourcing and heat recovery are not
+           in the source documents. They are the figures that would settle this
+           layer, and none can be published yet. -->
+      <dl class="notes" data-in>
+        <div><dt>Design PUE</dt><dd>To be published</dd></div>
+        <div><dt>Water use effectiveness</dt><dd>To be published</dd></div>
+        <div><dt>Renewable sourcing</dt><dd>To be published</dd></div>
+        <div><dt>Heat recovery</dt><dd>Under review</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       09 EXPANSION — the close.
+       =================================================================== -->
+  <section class="layer wrap" id="l09">
+    <div class="layer__head">
+      <p class="layer__idx" data-in><span class="m">Layer 09</span><span class="m">Expansion</span></p>
+      <h2 class="mega" data-in style="max-width:16ch">The AI revolution needs a new foundation.</h2>
+      <p class="lead" data-in>
+        Hyderabad is the first campus of a three gigawatt programme. Tenancy,
+        capital and delivery conversations are open now.
+      </p>
+      <!-- TODO(client): monitored mailbox required before launch. -->
+      <p data-in style="margin-top:var(--s3)">
+        <a class="link" href="mailto:xyz@codexspace.ai?subject=Enquiry">xyz@codexspace.ai</a>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="layer wrap" style="padding-block:var(--s5);border-top:1px solid var(--rule)">
+  <p class="m" style="display:flex;flex-wrap:wrap;gap:var(--s2) var(--s5)">
+    <span>Codex Space &middot; Hyderabad, Telangana, India</span>
+    <span>Entity and registered office to be confirmed</span>
+    <span>In development &middot; nothing delivered</span>
+    <span id="year">2026</span>
+  </p>
+</footer>
+
+</body>
+</html>
