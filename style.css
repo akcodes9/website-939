@@ -91,7 +91,12 @@
      out rather than as space. 132 puts the gap at 264 — still unhurried, and
      close enough that two sections belong to one document. */
   --s7: clamp(64px, 6.6vw, 112px);
-  --s8: clamp(80px, 7.6vw, 132px);
+  /* The gap either side of a section rule, and the only thing --s8 sets. It was
+     7.6vw, which put 115px above and 115px below every rule on a 1512 screen —
+     230px of blank page between a plate's caption and the next layer's index,
+     enough that a section could end and begin with nothing visible between
+     them. The rule already does the dividing; the space was only repeating it. */
+  --s8: clamp(48px, 4.4vw, 80px);
 
   --page: 1560px;
   --gut:  clamp(20px, 4.4vw, 76px);
