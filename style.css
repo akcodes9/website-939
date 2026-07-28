@@ -758,6 +758,42 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   }
 }
 
+@media (min-width: 1100px) {
+  /* Two schedules side by side. Each row ran 302px tall because the drawing set
+     the height while the answer beside it was only 77 — 193px of every row was
+     blank, five times over, and that alone was 60% of the section. Pairing the
+     rows halves the count without shrinking the drawings to thumbnails, which
+     was the other way to get the height back and would have cost the detail
+     they exist for.
+
+     The label moves above its answer here rather than sitting in a 16ch field:
+     at half width that field would eat a quarter of the column. */
+  .claims {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--s7);
+  }
+  .claims > div {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 240px);
+    grid-template-areas: "label label" "text  fig";
+    gap: var(--s2) var(--s4);
+    align-items: start;
+  }
+  .claims dt { grid-area: label; }
+  .claims .claims__a { grid-area: text; }
+  .claims__f { grid-area: fig; justify-self: end; max-width: 240px; }
+
+  /* Five into two columns leaves the last one beside a hole, so it runs the
+     full width and keeps the original three-field arrangement — which reads as
+     the schedule closing rather than as a row that failed to pair. */
+  .claims > div:last-child {
+    grid-column: 1 / -1;
+    grid-template-columns: 16ch minmax(0, 62ch) 1fr;
+    grid-template-areas: "label text fig";
+    align-items: center;
+  }
+}
+
 /* The dark interval. One section inverts, where the machine is running rather
    than being built — operations. It is the only tonal event on the page. */
 /* Layer 06 carries a ground instead of a plate. Measured mean luminance of the
