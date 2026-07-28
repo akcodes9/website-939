@@ -802,14 +802,18 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
        has no caption to carry, so it stops at the image and lands a little
        under its neighbours — around 88% of them — which is what keeps the dark
        interval from reading as the tallest thing on the page. */
-    /* Four times the band it was. At this height the section stops being a
-       layer with a dark background and becomes a full-bleed interval — taller
-       than the viewport on most laptops — which is the one place on the page
-       where that is the point: it is the only tonal event, and the only moving
-       footage, and both want room. Held in vw like the plate heights so it
-       tracks the same axis as the rest of the page, and capped at 1320 so an
-       ultrawide does not turn it into a minute of scrolling. */
-    min-height: clamp(880px, 84vw, 1320px);
+    /* Settled: the same height as a layer that carries a drawing. Operations is
+       the only one with no plate, so without a floor its body ran ~190px while
+       its neighbours ran ~480, and the page's one dark interval read as a thin
+       band with no room for the footage behind it.
+
+       The number is derived, not chosen. A plate layer's body is the image —
+       the 7fr column at 1800x1005, which is 28vw within a point or two from
+       1100 up to where --page stops growing — plus the 62px of gap, rule and
+       caption line beneath it. Matching that puts the black within 6px of its
+       neighbours at every width, so it reads as one layer among ten rather
+       than as an interval. */
+    min-height: calc(clamp(280px, 28vw, 430px) + 62px);
     align-content: center;
   }
   .layer--flip .layer__body > :first-child { order: 2; }
