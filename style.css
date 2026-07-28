@@ -300,7 +300,7 @@ a { color: inherit; text-decoration: none; }
 .nav__mark { flex: none; font-weight: 600; font-size: var(--t-cap); letter-spacing: -0.01em; color: var(--black); }
 /* min-width:0 on both the button and the label. A flex item defaults to
    min-width:auto, which refuses to shrink below its content — without this the
-   longest sheet name ("Layer 00 · General arrangement") pushes the bar wider
+   longest sheet name ("Layer 08 · Sustainability") pushes the bar wider
    than a phone instead of ellipsing, and the row overflows. */
 #nav-sheet {
   flex: 1 1 auto; min-width: 0;
