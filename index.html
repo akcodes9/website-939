@@ -14,9 +14,13 @@
 <meta property="og:description" content="A 550 MW AI campus at Hyderabad, shown layer by layer. The first of a 3 GW programme.">
 <!-- The four-stage phasing plate: the one drawing in the set that is already
      landscape, and the one that says what the company is doing rather than
-     what it has. TODO(client): scrapers do not resolve relative paths — this
-     needs the absolute URL before launch. -->
-<meta property="og:image" content="assets/og.png">
+     what it has. Absolute, because scrapers do not resolve relative paths —
+     Slack, WhatsApp and LinkedIn each fetch this with no page context, so a
+     relative path yields a preview card with no image at all. If the site moves
+     to its own domain, the origin changes here, in og:url and in canonical. -->
+<meta property="og:url" content="https://akcodes9.github.io/codex-space/">
+<link rel="canonical" href="https://akcodes9.github.io/codex-space/">
+<meta property="og:image" content="https://akcodes9.github.io/codex-space/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Four isometric engineering drawings in a row: a bare graded platform, then one, two and four hall blocks with plant and perimeter added at each stage.">
