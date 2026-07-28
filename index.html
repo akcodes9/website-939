@@ -71,10 +71,21 @@
 <div class="cine" id="cine" role="dialog" aria-modal="true"
      aria-label="Opening sequence" hidden>
   <canvas class="cine__c" id="cine-c" aria-hidden="true"></canvas>
+
+  <!-- The name and what the company is, stated over the assembly rather than
+       left to the bottom rail. It sat in the corner before, which is where a
+       plotter stamp goes and not where an identity does — this is the first
+       thing anyone sees of the company and it should say so. -->
+  <div class="cine__id" aria-hidden="true">
+    <p class="cine__mark">Codex&nbsp;Space</p>
+    <p class="cine__tag">The infrastructure beneath AI</p>
+  </div>
+
   <p class="cine__meta" aria-hidden="true">
-    <span>Codex Space</span>
-    <span id="cine-state">Assembling</span>
-    <span>Hyderabad · 17.3850&deg;N 78.4867&deg;E</span>
+    <span>Campus 01 &middot; Hyderabad</span>
+    <span class="cine__st"><span id="cine-state">Assembling</span><span
+      class="cine__dots" id="cine-dots"><i></i><i></i><i></i></span></span>
+    <span>17.3850&deg;N 78.4867&deg;E</span>
   </p>
   <button class="cine__skip" id="cine-skip" type="button">Skip<span class="vh"> opening sequence</span></button>
 </div>

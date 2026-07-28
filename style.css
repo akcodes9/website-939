@@ -435,11 +435,54 @@ a { color: inherit; text-decoration: none; }
 .cine[hidden] { display: none; }
 .cine[data-leaving="true"] { opacity: 0; pointer-events: none; }
 .cine__c { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* The identity, centred over the assembly. */
+.cine__id {
+  position: absolute; left: var(--gut); right: var(--gut);
+  top: clamp(48px, 7.5vh, 96px);
+  text-align: center; pointer-events: none;
+  animation: cine-id 1000ms var(--ease) 500ms both;
+}
+.cine__mark {
+  font-family: var(--mono); text-transform: uppercase;
+  font-size: clamp(15px, 1.5vw, 22px); letter-spacing: 0.34em;
+  color: var(--white);
+}
+.cine__tag {
+  font-family: var(--mono); text-transform: uppercase;
+  font-size: var(--t-mono); letter-spacing: 0.16em;
+  color: var(--grey-2); margin-top: 12px;
+}
+@keyframes cine-id { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+/* Three equal tracks, so the state sits on the screen's centre line and not
+   merely between whatever the two side items happen to measure. space-between
+   put it wherever the coordinates ended, which was 130px left of the assembly
+   it is describing. */
 .cine__meta {
   position: absolute; left: var(--gut); bottom: var(--s5); right: var(--gut);
-  display: flex; justify-content: space-between; gap: var(--s4);
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--s4);
+  align-items: baseline;
   font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--grey-2);
+}
+.cine__meta > :last-child { text-align: right; }
+
+/* The three dots. Separate elements rather than an animated `content` string,
+   which is not interpolatable and lands differently in every engine. They stop
+   when the sequence does — the state reads ASSEMBLED at that point, and a
+   finished thing should not still be waiting. */
+.cine__st { display: inline-flex; align-items: baseline; }
+.cine__dots { display: inline-flex; margin-left: 2px; }
+.cine__dots i { font-style: normal; opacity: 0; animation: cine-dot 1400ms steps(1, end) infinite; }
+.cine__dots i::before { content: "."; }
+.cine__dots i:nth-child(2) { animation-delay: 240ms; }
+.cine__dots i:nth-child(3) { animation-delay: 480ms; }
+.cine__dots[hidden] { display: none; }
+@keyframes cine-dot { 0%, 70% { opacity: 1; } 71%, 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .cine__id { animation: none; }
+  .cine__dots i { animation: none; opacity: 1; }
 }
 .cine__skip {
   position: absolute; right: var(--gut); top: var(--s4);

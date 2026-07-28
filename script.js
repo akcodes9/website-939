@@ -54,13 +54,18 @@
 
     /* Model space is a unit footprint; the layers differ only in height and in
        what is drawn on them, exactly as the plates do. */
+    /* 0.34 apart, the middle four collided: every plate's motif overlapped the
+       plate above it and the stack read as one dense knot rather than as six
+       separable layers, which is the entire point of an exploded view. 0.46
+       separates them; the footprint below shrinks to keep the taller stack in
+       frame. */
     var LAYERS = [
       { z: 0.00, kind: 'slab'  },   /* foundation  */
-      { z: 0.34, kind: 'gear'  },   /* electrical  */
-      { z: 0.68, kind: 'pipe'  },   /* cooling     */
-      { z: 1.02, kind: 'racks' },   /* compute     */
-      { z: 1.36, kind: 'tray'  },   /* network     */
-      { z: 1.70, kind: 'roof'  }    /* roof plant  */
+      { z: 0.46, kind: 'gear'  },   /* electrical  */
+      { z: 0.92, kind: 'pipe'  },   /* cooling     */
+      { z: 1.38, kind: 'racks' },   /* compute     */
+      { z: 1.84, kind: 'tray'  },   /* network     */
+      { z: 2.30, kind: 'roof'  }    /* roof plant  */
     ];
     /* The projection centres on z = 0, so a stack this tall would hang off the
        top of the frame. Offsetting by half its height centres the assembly
@@ -73,7 +78,7 @@
       W = r.width; H = r.height;
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      S = Math.min(W, H) * 0.265;
+      S = Math.min(W, H) * 0.235;
     }
 
     /* Isometric projection. One function, used for every point drawn. */
@@ -93,10 +98,15 @@
       var h = 0.5;   /* half-footprint */
       ctx.globalAlpha = alpha;
 
-      /* outline */
+      /* The plate edge, at full weight. Everything drawn inside it afterwards
+         is lighter, so six planes read as six even where they overlap — at one
+         weight throughout the middle of the stack was an undifferentiated
+         thicket of equal lines. */
+      ctx.lineWidth = 1.4;
       ctx.beginPath();
       moveTo(P(-h, -h, z)); lineTo(P(h, -h, z)); lineTo(P(h, h, z)); lineTo(P(-h, h, z));
       ctx.closePath(); ctx.stroke();
+      ctx.lineWidth = 0.85;
 
       /* what sits on it — one motif per layer, drawn from the same grid so the
          six read as one machine rather than six unrelated diagrams */
@@ -147,6 +157,7 @@
       }
       ctx.stroke();
       ctx.globalAlpha = 1;
+      ctx.lineWidth = 1;
     }
 
     function frame(t) {
@@ -208,7 +219,11 @@
       var t = Math.min(1, (now - start) / DUR);
       at = t;
       frame(t);
-      if (state && t > 0.86) { state.textContent = 'Assembled'; }
+      if (state && t > 0.86 && state.textContent !== 'Assembled') {
+        state.textContent = 'Assembled';
+        var dots = $('#cine-dots');
+        if (dots) { dots.hidden = true; }
+      }
       if (t < 1) { raf = requestAnimationFrame(tick); }
     }
     raf = requestAnimationFrame(tick);
