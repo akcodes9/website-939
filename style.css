@@ -640,15 +640,58 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--grey);
 }
-.claims dd { color: var(--charcoal); text-wrap: pretty; }
+.claims .claims__a { color: var(--charcoal); text-wrap: pretty; }
+
+/* The label is the control. Reset rather than restyle, so it inherits the mono
+   the rest of the schedule is set in and reads as a label that happens to be
+   pressable, not as a button dropped into a drawing. */
+.claims__btn {
+  font: inherit; color: inherit; letter-spacing: inherit; text-transform: inherit;
+  background: none; border: 0; padding: 0; margin: 0;
+  display: inline-flex; align-items: center; gap: 0.7em;
+  text-align: left; cursor: pointer;
+}
+/* A plus that loses its upright to become a minus. One element, one transform,
+   and it never redraws — which at 9px is the difference between a state change
+   and a flicker. */
+.claims__mk { position: relative; flex: none; width: 9px; height: 9px; }
+.claims__mk::before, .claims__mk::after {
+  content: ""; position: absolute; background: currentColor;
+}
+.claims__mk::before { left: 0; right: 0; top: 4px; height: 1px; }
+.claims__mk::after {
+  top: 0; bottom: 0; left: 4px; width: 1px;
+  transition: transform var(--fast) var(--ease);
+}
+.claims__btn[aria-expanded="true"] { color: var(--black); }
+.claims__btn[aria-expanded="true"] .claims__mk::after { transform: scaleY(0); }
+
+.claims__f { margin: 0; }
+.claims__f img { width: 100%; height: auto; }
+.claims__f[hidden] { display: none; }
+
 @media (min-width: 720px) {
   /* Runs the full measure under the drawing rather than inside a column, so the
      label sits in its own narrow field and the answer takes a proper line
      length beside it — a schedule, which is what it is. 16ch holds the longest
      label, `Air and noise`, without wrapping, so every answer starts level.
      The answer is capped at 62ch: the row is far wider than that, and prose set
-     to the full width of this page would be unreadable. */
-  .claims > div { grid-template-columns: 16ch minmax(0, 62ch); }
+     to the full width of this page would be unreadable. The third column is the
+     space that cap leaves over, which is where the detail drawing lands. */
+  .claims > div { grid-template-columns: 16ch minmax(0, 62ch) 1fr; align-items: start; }
+}
+
+/* display is in the transition list so the drawing fades rather than appearing,
+   while `hidden` still does its own job for anything not running CSS. */
+@media (prefers-reduced-motion: no-preference) {
+  .claims__f {
+    opacity: 1; transform: none;
+    transition: opacity var(--base) var(--ease), transform var(--base) var(--ease),
+                display var(--base) allow-discrete;
+  }
+  @starting-style {
+    .claims__f { opacity: 0; transform: translateY(8px); }
+  }
 }
 
 /* The dark interval. One section inverts, where the machine is running rather

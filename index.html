@@ -464,36 +464,77 @@
          drawing's column, which left the prose column two paragraphs short of
          the answers' height and the whole layer lopsided. Full width, it reads
          as a schedule under the drawing, which is what it is. -->
+    <!-- Each answer carries a detail drawing, opened from its own label. A
+         drawing sheet works this way already: the schedule states the position,
+         the detail callout shows the thing. Two dd to one dt is valid, and
+         is what puts the drawing in the row's third column rather than under
+         the prose. The drawing is supporting evidence, never the answer itself
+         — the sentence is always visible, so nothing is hidden behind a click. -->
     <dl class="claims" data-in>
-        <div>
-          <dt>Water</dt>
-          <dd>Closed-loop cooling, so heat is rejected without evaporating
-              drinking water. Make-up demand is met from treated effluent rather
-              than from the municipal network or from groundwater.</dd>
-        </div>
-        <div>
-          <dt>Power</dt>
-          <dd>Contracted as new renewable capacity added to the grid, not drawn
-              from what already serves the city. Sited where transmission exists,
-              so no new corridor is cut through inhabited land.</dd>
-        </div>
-        <div>
-          <dt>Land</dt>
-          <dd>Industrial-zoned before it was ours. No agricultural conversion
-              and no displacement.</dd>
-        </div>
-        <div>
-          <dt>Air and noise</dt>
-          <dd>Standby generation runs on outage and scheduled test only, inside
-              daylight hours, with the test calendar given to the neighbouring
-              wards rather than filed.</dd>
-        </div>
-        <div>
-          <dt>Heat</dt>
-          <dd>Rejected heat is a resource this campus currently wastes. Recovery
-              is under review, and the review will be published whether or not
-              it is favourable.</dd>
-        </div>
+      <div>
+        <dt><button class="claims__btn" type="button" aria-expanded="false" aria-controls="cl-water">Water<span class="claims__mk" aria-hidden="true"></span><span class="vh">, show detail drawing</span></button></dt>
+        <dd class="claims__a">Closed-loop cooling, so heat is rejected without evaporating
+            drinking water. Make-up demand is met from treated effluent rather
+            than from the municipal network or from groundwater.</dd>
+        <dd class="claims__f" id="cl-water" hidden>
+          <img src="assets/draw/cl-water.webp"
+               srcset="assets/draw/cl-water.webp 900w, assets/draw/cl-water@2x.webp 1800w"
+               sizes="(min-width: 1100px) 34vw, 92vw" width="900" height="675"
+               loading="lazy" decoding="async"
+               alt="Isometric detail of a closed cooling circuit: a bank of finned dry air-cooled coolers, a pump skid, and a sealed cylindrical tank joined by a continuous pair of pipes forming one unbroken loop. There is no cooling tower and no open water surface.">
+        </dd>
+      </div>
+      <div>
+        <dt><button class="claims__btn" type="button" aria-expanded="false" aria-controls="cl-power">Power<span class="claims__mk" aria-hidden="true"></span><span class="vh">, show detail drawing</span></button></dt>
+        <dd class="claims__a">Contracted as new renewable capacity added to the grid, not drawn
+            from what already serves the city. Sited where transmission exists,
+            so no new corridor is cut through inhabited land.</dd>
+        <dd class="claims__f" id="cl-power" hidden>
+          <img src="assets/draw/cl-power.webp"
+               srcset="assets/draw/cl-power.webp 900w, assets/draw/cl-power@2x.webp 1800w"
+               sizes="(min-width: 1100px) 34vw, 92vw" width="900" height="675"
+               loading="lazy" decoding="async"
+               alt="Isometric detail of the supply arrangement: a lattice transmission tower carrying lines into a fenced substation of two transformers and a switchgear row, with wind turbines and a tilted photovoltaic array feeding the same busbar.">
+        </dd>
+      </div>
+      <div>
+        <dt><button class="claims__btn" type="button" aria-expanded="false" aria-controls="cl-land">Land<span class="claims__mk" aria-hidden="true"></span><span class="vh">, show detail drawing</span></button></dt>
+        <dd class="claims__a">Industrial-zoned before it was ours. No agricultural conversion
+            and no displacement.</dd>
+        <dd class="claims__f" id="cl-land" hidden>
+          <img src="assets/draw/cl-land.webp"
+               srcset="assets/draw/cl-land.webp 900w, assets/draw/cl-land@2x.webp 1800w"
+               sizes="(min-width: 1100px) 34vw, 92vw" width="900" height="675"
+               loading="lazy" decoding="async"
+               alt="Isometric detail of the site boundary: a flat rectangular industrial parcel inside a fenced perimeter with one access road at a corner, and immediately outside the fence a band of undisturbed farmland drawn as furrowed strips with a few trees.">
+        </dd>
+      </div>
+      <div>
+        <dt><button class="claims__btn" type="button" aria-expanded="false" aria-controls="cl-air">Air and noise<span class="claims__mk" aria-hidden="true"></span><span class="vh">, show detail drawing</span></button></dt>
+        <dd class="claims__a">Standby generation runs on outage and scheduled test only, inside
+            daylight hours, with the test calendar given to the neighbouring
+            wards rather than filed.</dd>
+        <dd class="claims__f" id="cl-air" hidden>
+          <img src="assets/draw/cl-air.webp"
+               srcset="assets/draw/cl-air.webp 900w, assets/draw/cl-air@2x.webp 1800w"
+               sizes="(min-width: 1100px) 34vw, 92vw" width="900" height="675"
+               loading="lazy" decoding="async"
+               alt="Isometric detail of standby generation: three enclosed generator containers in a row, each with acoustic louvre panels and a tall exhaust stack carrying a silencer, standing on a plinth behind a solid acoustic screen wall.">
+        </dd>
+      </div>
+      <div>
+        <dt><button class="claims__btn" type="button" aria-expanded="false" aria-controls="cl-heat">Heat<span class="claims__mk" aria-hidden="true"></span><span class="vh">, show detail drawing</span></button></dt>
+        <dd class="claims__a">Rejected heat is a resource this campus currently wastes. Recovery
+            is under review, and the review will be published whether or not
+            it is favourable.</dd>
+        <dd class="claims__f" id="cl-heat" hidden>
+          <img src="assets/draw/cl-heat.webp"
+               srcset="assets/draw/cl-heat.webp 900w, assets/draw/cl-heat@2x.webp 1800w"
+               sizes="(min-width: 1100px) 34vw, 92vw" width="900" height="675"
+               loading="lazy" decoding="async"
+               alt="Isometric detail of heat recovery pipework: one large insulated pipe leaving a building wall, running to a plate heat exchanger skid, and continuing into a manifold with three outgoing branches.">
+        </dd>
+      </div>
     </dl>
   </section>
 

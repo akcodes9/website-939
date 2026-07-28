@@ -903,6 +903,49 @@
      accessible copy of the heading is static regardless, so a screen reader
      hears one settled sentence rather than an h1 rewriting itself.
      -------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------
+     THE DETAIL CALLOUTS
+
+     Each row of the sustainability schedule can open a detail drawing beside
+     it. The sentence is always visible; only the drawing is behind the click,
+     so nothing a reader needs is hidden and the section still reads whole with
+     JavaScript switched off — every panel is plain `hidden` markup that this
+     wires up, not markup this creates.
+
+     One at a time. Five drawings open together turns a schedule into a scroll
+     and destroys the comparison between rows the list exists to make.
+     -------------------------------------------------------------------------- */
+  function initClaims() {
+    var list = $('.claims');
+    if (!list) { return; }
+    var btns = $$('.claims__btn', list);
+    if (!btns.length) { return; }
+
+    function panel(b) {
+      var id = b.getAttribute('aria-controls');
+      return id ? document.getElementById(id) : null;
+    }
+
+    function set(b, open) {
+      var p = panel(b);
+      if (!p) { return; }
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      p.hidden = !open;
+    }
+
+    btns.forEach(function (b) {
+      /* Closed is the resting state, asserted here rather than trusted from the
+         markup — a panel left open in the HTML would otherwise disagree with
+         its own button. */
+      set(b, false);
+      b.addEventListener('click', function () {
+        var open = b.getAttribute('aria-expanded') === 'true';
+        btns.forEach(function (other) { if (other !== b) { set(other, false); } });
+        set(b, !open);
+      });
+    });
+  }
+
   function initRotate() {
     var box = $('#rot');
     if (!box) { return; }
@@ -1030,7 +1073,7 @@
 
   var REGISTRY = {
     initCine: initCine, initWeave: initWeave, initNav: initNav, initSheet: initSheet,
-    initRegister: initRegister, initReveal: initReveal, initRotate: initRotate, initOps: initOps, initYear: initYear
+    initRegister: initRegister, initReveal: initReveal, initClaims: initClaims, initRotate: initRotate, initOps: initOps, initYear: initYear
   };
   Object.keys(REGISTRY).forEach(function (k) {
     if (typeof REGISTRY[k] !== 'function') { throw new Error('module missing from boot: ' + k); }
