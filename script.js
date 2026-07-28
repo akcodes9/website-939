@@ -334,16 +334,20 @@
       'varying vec3 vCol;' +
       'varying float vA;' +
       'void main(){' +
-      /* Wrapped distance to the nearest charge. Doubling aU puts two on the
-         curve; min(ph, 1-ph) makes the falloff symmetric across the seam so
-         there is no hard edge where the phase rolls over. */
-      '  float ph = fract(aU * 2.0 - uPulse);' +
+      /* Wrapped distance to the nearest charge. The multiplier on aU is how
+         many ride the curve at once: with two, red existed in only two places
+         and most of the form was grey whichever way it turned. Five spreads the
+         same quantity of colour across the whole knot, so wherever the cloud
+         falls in frame some of it is lit. min(ph, 1-ph) keeps the falloff
+         symmetric across the seam, so there is no hard edge where phase rolls
+         over. */
+      '  float ph = fract(aU * 5.0 - uPulse);' +
       '  float d = min(ph, 1.0 - ph);' +
       /* Written as 1 - smoothstep rather than with the edges swapped: GLSL
          leaves smoothstep undefined when edge0 >= edge1, and most drivers do
          the sane thing, which is exactly how that kind of bug survives to
          someone else's GPU. */
-      '  float band = 1.0 - smoothstep(0.0, 0.075, d);' +
+      '  float band = 1.0 - smoothstep(0.0, 0.105, d);' +
       '  vCol = mix(aCol, uLive, band);' +
       /* Lit points are also brighter and slightly larger. Colour alone at this
          grain is still too fine to register. */
@@ -631,9 +635,12 @@
       gl.uniformMatrix4fv(uMV, false, mv);
       gl.uniform1f(uSize, SIZE);
       gl.uniform1f(uAlpha, 0.58);
-      /* One lap in ~9s. Slower than it wants to be, so it reads as something
-         running through the structure rather than as a chase light. */
-      gl.uniform1f(uPulse, (now * 0.00011) % 1);
+      /* Five charges each cover a fifth of the knot per cycle, so the rate is
+         five times the two-charge figure to keep the same travel speed along
+         the curve — a full traverse in about 17s. Slower than it wants to be,
+         so it reads as something running through the structure rather than as
+         a chase light. */
+      gl.uniform1f(uPulse, (now * 0.0003) % 1);
 
       gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
       gl.bufferSubData(gl.ARRAY_BUFFER, 0, pos);
