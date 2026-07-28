@@ -810,10 +810,14 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
        The number is derived, not chosen. A plate layer's body is the image —
        the 7fr column at 1800x1005, which is 28vw within a point or two from
        1100 up to where --page stops growing — plus the 62px of gap, rule and
-       caption line beneath it. Matching that puts the black within 6px of its
-       neighbours at every width, so it reads as one layer among ten rather
-       than as an interval. */
-    min-height: calc(clamp(280px, 28vw, 430px) + 62px);
+       caption line beneath it, which came to 485.
+
+       450 is a chosen number rather than that derived one — close enough to a
+       drawing layer to still sit in the set, a little under it so the dark
+       section is not the tallest thing on the page. Held as a clamp so narrow
+       viewports get a proportionate band instead of a fixed slab: 30vw governs
+       up to about 1500, and the 450 cap takes over above it. */
+    min-height: clamp(300px, 30vw, 450px);
     align-content: center;
   }
   .layer--flip .layer__body > :first-child { order: 2; }
