@@ -630,7 +630,7 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
    for a sentence — the answer would rag backwards from the right edge and read
    as a caption. Here the label holds a narrow fixed column and the answer runs
    at its own measure beside it, which is how a schedule is set. */
-.claims { border-top: 1px solid var(--rule); }
+.claims { border-top: 1px solid var(--rule); margin-top: var(--s6); }
 .claims > div {
   display: grid; grid-template-columns: 1fr; gap: var(--s1) var(--s4);
   padding-block: var(--s2);
@@ -640,11 +640,15 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
   font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--grey);
 }
-.claims dd { color: var(--charcoal); max-width: 54ch; text-wrap: pretty; }
+.claims dd { color: var(--charcoal); text-wrap: pretty; }
 @media (min-width: 720px) {
-  /* 14ch holds the longest label — `Air and noise` — without wrapping it, so
-     the answers all start on one line down the page. */
-  .claims > div { grid-template-columns: 14ch 1fr; }
+  /* Runs the full measure under the drawing rather than inside a column, so the
+     label sits in its own narrow field and the answer takes a proper line
+     length beside it — a schedule, which is what it is. 16ch holds the longest
+     label, `Air and noise`, without wrapping, so every answer starts level.
+     The answer is capped at 62ch: the row is far wider than that, and prose set
+     to the full width of this page would be unreadable. */
+  .claims > div { grid-template-columns: 16ch minmax(0, 62ch); }
 }
 
 /* The dark interval. One section inverts, where the machine is running rather

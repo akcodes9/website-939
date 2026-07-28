@@ -107,10 +107,10 @@
   <!-- The register. Ten rows, the trade colour stated as a rule at the left of
        each, and the drawing number on the right — which is where the two
        numbering systems stop being confusing, because you can see them side by
-       side. Layers 06, 08 and 09 carry no plate and say so. -->
+       side. Layers 06 and 09 carry no plate and say so. -->
   <nav class="register" id="register" aria-label="Drawing register" hidden>
     <div class="register__in">
-      <p class="m register__cap">Drawing register &middot; 10 layers, 6 plates</p>
+      <p class="m register__cap">Drawing register &middot; 10 layers, 7 plates</p>
       <ol class="register__list">
         <li><a href="#hero"><span class="m register__n">00</span><span class="register__t">General arrangement</span><span class="m register__d">No plate</span></a></li>
         <li><a href="#l01"><span class="m register__n">01</span><span class="register__t">Foundation</span><span class="m register__d">Dwg 01</span></a></li>
@@ -120,7 +120,7 @@
         <li style="--sys:var(--sys-network)"><a href="#l05"><span class="m register__n">05</span><span class="register__t">Network</span><span class="m register__d">Dwg 05</span></a></li>
         <li style="--sys:var(--live)"><a href="#l06"><span class="m register__n">06</span><span class="register__t">Operations</span><span class="m register__d">No plate</span></a></li>
         <li><a href="#l07"><span class="m register__n">07</span><span class="register__t">Scale</span><span class="m register__d">Dwg 06</span></a></li>
-        <li><a href="#l08"><span class="m register__n">08</span><span class="register__t">Sustainability</span><span class="m register__d">No plate</span></a></li>
+        <li><a href="#l08"><span class="m register__n">08</span><span class="register__t">Sustainability</span><span class="m register__d">Dwg 07</span></a></li>
         <li><a href="#l09"><span class="m register__n">09</span><span class="register__t">Expansion</span><span class="m register__d">No plate</span></a></li>
       </ol>
     </div>
@@ -444,12 +444,27 @@
         </p>
       </div>
 
-      <!-- TODO(client): every answer below is a drafted position, not a signed
-           commitment. Each needs confirming against the environmental filings
-           before this goes to anyone outside. The water and land claims are the
-           two that would be checked first and are the two most costly to get
-           wrong. -->
-      <dl class="claims" data-in>
+      <figure class="plate" data-in>
+        <img src="assets/draw/sustain.webp"
+             srcset="assets/draw/sustain.webp 1800w, assets/draw/sustain@2x.webp 3600w"
+             sizes="(min-width: 860px) 52vw, 100vw"
+             width="1800" height="1005" loading="lazy" decoding="async"
+             alt="Isometric drawing of the campus environmental arrangement: wind turbines and a tilted photovoltaic array on open ground, an outdoor substation of transformers and switchgear, a long data hall with roof plant, and a bank of dry air-cooled coolers joined to the hall by a continuous pair of pipes that run out and return as an unbroken circuit. Beside them a water treatment skid and a single storage tank, with a planted drainage swale and a line of trees along the front boundary. There is no cooling tower, no plume and no discharge.">
+        <figcaption><span class="m">Dwg 07</span><span class="m">Sustainability &middot; closed circuit</span></figcaption>
+      </figure>
+    </div>
+
+    <!-- TODO(client): every answer below is a drafted position, not a signed
+         commitment. Each needs confirming against the environmental filings
+         before this goes to anyone outside. The water and land claims are the
+         two that would be checked first and are the two most costly to get
+         wrong.
+
+         It sits outside .layer__body deliberately. In the body it took the
+         drawing's column, which left the prose column two paragraphs short of
+         the answers' height and the whole layer lopsided. Full width, it reads
+         as a schedule under the drawing, which is what it is. -->
+    <dl class="claims" data-in>
         <div>
           <dt>Water</dt>
           <dd>Closed-loop cooling, so heat is rejected without evaporating
@@ -479,21 +494,7 @@
               is under review, and the review will be published whether or not
               it is favourable.</dd>
         </div>
-      </dl>
-
-      <!-- TODO(client): PUE, WUE, renewable sourcing and heat recovery are not
-           in the source documents. They are the figures that would settle this
-           layer, and none can be published yet. They stay visible and unfilled
-           on purpose: a sustainability section with positions but no numbers
-           should say so itself, rather than let a reader assume the numbers
-           were simply not worth printing. -->
-      <dl class="notes" data-in style="margin-top:var(--s5)">
-        <div><dt>Design PUE</dt><dd>To be published</dd></div>
-        <div><dt>Water use effectiveness</dt><dd>To be published</dd></div>
-        <div><dt>Renewable sourcing</dt><dd>To be published</dd></div>
-        <div><dt>Heat recovery</dt><dd>Under review</dd></div>
-      </dl>
-    </div>
+    </dl>
   </section>
 
   <!-- ======================================================================
