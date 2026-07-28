@@ -721,7 +721,7 @@ html[data-cine="done"] #main { opacity: 1; transition: opacity 900ms var(--ease)
    for a sentence — the answer would rag backwards from the right edge and read
    as a caption. Here the label holds a narrow fixed column and the answer runs
    at its own measure beside it, which is how a schedule is set. */
-.claims { border-top: 1px solid var(--rule); margin-top: var(--s6); }
+.claims { border-top: 1px solid var(--rule); margin-top: var(--s2); }
 .claims > div {
   display: grid; grid-template-columns: 1fr; gap: var(--s1) var(--s4);
   padding-block: var(--s2);
