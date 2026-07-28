@@ -916,7 +916,12 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
     text-align: center;
   }
   .hero__spec > div { padding: 0; border-left: 0; }
-  .layer__body { grid-template-columns: 5fr 7fr; gap: var(--s7); align-items: start; }
+  /* Centred, not top-aligned. The prose column runs 232-288px against a 479px
+     plate on every layer, so starting both at the top put all the text in the
+     upper half and left the lower half of the column empty beside the drawing —
+     the two sides read as sitting at different heights. Centring hangs the text
+     on the drawing's middle, which is where the drawing's own mass is. */
+  .layer__body { grid-template-columns: 5fr 7fr; gap: var(--s7); align-items: center; }
 
   .layer--flip .layer__body > :first-child { order: 2; }
 }
