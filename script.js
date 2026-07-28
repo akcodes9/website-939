@@ -52,23 +52,25 @@
     var COS = Math.cos(Math.PI / 6), SIN = Math.sin(Math.PI / 6);   /* true 30° */
     var W = 0, H = 0, S = 1;
 
-    /* The campus, assembling. This was six abstract plates exploding apart —
-       legible as a diagram, but a diagram of nothing anyone could name. The
-       opening is the first thing a visitor sees and it should show the subject:
-       ground, then boundary, then halls, then the plant that makes them a data
-       centre. Same projection as every plate in the set, so the opening is
-       literally the same drawing as the rest of the site, moving.
-
-       Model space is the campus footprint in arbitrary units, origin at centre. */
-    var HALLS = [
-      { x: -2.30, y: -1.35, w: 2.05, d: 0.95 },
-      { x: -2.30, y:  0.35, w: 2.05, d: 0.95 },
-      { x:  0.30, y: -1.35, w: 2.05, d: 0.95 },
-      { x:  0.30, y:  0.35, w: 2.05, d: 0.95 }
+    /* Model space is a unit footprint; the layers differ only in height and in
+       what is drawn on them, exactly as the plates do. */
+    /* 0.34 apart, the middle four collided: every plate's motif overlapped the
+       plate above it and the stack read as one dense knot rather than as six
+       separable layers, which is the entire point of an exploded view. 0.46
+       separates them; the footprint below shrinks to keep the taller stack in
+       frame. */
+    var LAYERS = [
+      { z: 0.00, kind: 'slab'  },   /* foundation  */
+      { z: 0.46, kind: 'gear'  },   /* electrical  */
+      { z: 0.92, kind: 'pipe'  },   /* cooling     */
+      { z: 1.38, kind: 'racks' },   /* compute     */
+      { z: 1.84, kind: 'tray'  },   /* network     */
+      { z: 2.30, kind: 'roof'  }    /* roof plant  */
     ];
-    var HALL_H = 0.62;
-    var SITE = { x0: -3.30, y0: -2.35, x1: 3.30, y1: 2.35 };
-    var MID = 0.34;   /* the projection centres on z = 0; lift it to the halls */
+    /* The projection centres on z = 0, so a stack this tall would hang off the
+       top of the frame. Offsetting by half its height centres the assembly
+       itself rather than its base. */
+    var MID = LAYERS[LAYERS.length - 1].z / 2;
 
     function size() {
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -76,14 +78,10 @@
       W = r.width; H = r.height;
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      /* Derived, not guessed. The scene is 6.6 x 4.7 x 1.0 in model space,
-         which projects to 9.79S wide and 6.12S tall; dividing by those with a
-         12% margin is what keeps the whole site inside the frame at any aspect.
-         The first pair of numbers I tried overran the viewport by 130px on one
-         side and 110 on the other. */
-      S = Math.min(W / 11.1, H / 6.95);
+      S = Math.min(W, H) * 0.235;
     }
 
+    /* Isometric projection. One function, used for every point drawn. */
     function P(x, y, z) {
       return {
         x: W / 2 + (x - y) * COS * S,
@@ -96,138 +94,149 @@
     function ease(t) { return t < 0 ? 0 : t > 1 ? 1 : 1 - Math.pow(1 - t, 3); }
     function span(t, a, b) { return ease((t - a) / (b - a)); }
 
-    /* A wireframe box: the two horizontal rectangles and the four verticals
-       between them. Every edge is drawn — on black, a wireframe reads as the
-       structure of a thing rather than as its surface, which is what a building
-       under construction actually is. */
-    function box(x, y, z, w, d, h) {
-      var i, lo = [[x, y], [x + w, y], [x + w, y + d], [x, y + d]];
-      for (i = 0; i < 4; i++) {
-        moveTo(P(lo[i][0], lo[i][1], z));
-        lineTo(P(lo[(i + 1) % 4][0], lo[(i + 1) % 4][1], z));
-        moveTo(P(lo[i][0], lo[i][1], z + h));
-        lineTo(P(lo[(i + 1) % 4][0], lo[(i + 1) % 4][1], z + h));
-        moveTo(P(lo[i][0], lo[i][1], z));
-        lineTo(P(lo[i][0], lo[i][1], z + h));
+    function plate(z, k, alpha) {
+      var h = 0.5;   /* half-footprint */
+      ctx.globalAlpha = alpha;
+
+      /* The plate edge, at full weight. Everything drawn inside it afterwards
+         is lighter, so six planes read as six even where they overlap — at one
+         weight throughout the middle of the stack was an undifferentiated
+         thicket of equal lines. */
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      moveTo(P(-h, -h, z)); lineTo(P(h, -h, z)); lineTo(P(h, h, z)); lineTo(P(-h, h, z));
+      ctx.closePath(); ctx.stroke();
+      ctx.lineWidth = 0.85;
+
+      /* What sits on the plate. Every motif was flat marks on a plane before —
+         scratches on a square, which is why no layer read as the system it is
+         meant to be. They stand up now: the equipment is drawn as small boxes
+         with height, so a plate reads as a floor with plant on it. Same
+         footprint, same stack, same silhouette — only the content changed. */
+      ctx.globalAlpha = alpha * 0.78;
+      ctx.beginPath();
+      var i, j, u, v;
+
+      /* a small extruded box: top face and the two vertical edges that show */
+      function unit(x, y, w, d, hh) {
+        moveTo(P(x, y, z + hh));         lineTo(P(x + w, y, z + hh));
+        lineTo(P(x + w, y + d, z + hh)); lineTo(P(x, y + d, z + hh));
+        ctx.closePath();
+        moveTo(P(x + w, y, z));          lineTo(P(x + w, y, z + hh));
+        moveTo(P(x + w, y + d, z));      lineTo(P(x + w, y + d, z + hh));
+        moveTo(P(x, y + d, z));          lineTo(P(x, y + d, z + hh));
+        moveTo(P(x + w, y + d, z));      lineTo(P(x, y + d, z));
+        moveTo(P(x + w, y + d, z));      lineTo(P(x + w, y, z));
       }
-    }
-    function rect(x0, y0, x1, y1, z) {
-      moveTo(P(x0, y0, z)); lineTo(P(x1, y0, z));
-      lineTo(P(x1, y1, z)); lineTo(P(x0, y1, z)); ctx.closePath();
+
+      if (k === 'slab') {                       /* setting-out grid, pad footings */
+        for (i = 1; i < 5; i++) {
+          u = -h + i * (2 * h / 5);
+          moveTo(P(u, -h, z)); lineTo(P(u, h, z));
+          moveTo(P(-h, u, z)); lineTo(P(h, u, z));
+        }
+        for (i = 0; i < 3; i++) {
+          for (j = 0; j < 3; j++) {
+            unit(-0.32 + i * 0.32, -0.32 + j * 0.32, 0.1, 0.1, 0.05);
+          }
+        }
+      } else if (k === 'gear') {                /* transformers on a busbar */
+        for (i = 0; i < 4; i++) {
+          unit(-0.36 + i * 0.24, -0.1, 0.15, 0.2, 0.16);
+        }
+        moveTo(P(-0.4, 0.22, z + 0.2)); lineTo(P(0.4, 0.22, z + 0.2));
+        for (i = 0; i < 4; i++) {
+          u = -0.29 + i * 0.24;
+          moveTo(P(u, 0.1, z + 0.16)); lineTo(P(u, 0.22, z + 0.2));
+        }
+      } else if (k === 'pipe') {                /* a closed circuit, flow and return */
+        moveTo(P(-0.36, -0.36, z + 0.05)); lineTo(P(0.36, -0.36, z + 0.05));
+        lineTo(P(0.36, 0.36, z + 0.05));   lineTo(P(-0.36, 0.36, z + 0.05));
+        ctx.closePath();
+        moveTo(P(-0.28, -0.28, z + 0.05)); lineTo(P(0.28, -0.28, z + 0.05));
+        lineTo(P(0.28, 0.28, z + 0.05));   lineTo(P(-0.28, 0.28, z + 0.05));
+        ctx.closePath();
+        for (i = 0; i < 3; i++) {
+          unit(-0.24 + i * 0.24, -0.08, 0.12, 0.16, 0.1);
+        }
+      } else if (k === 'racks') {               /* two rows and the aisle between */
+        for (j = 0; j < 2; j++) {
+          v = j === 0 ? -0.34 : 0.14;
+          for (i = 0; i < 6; i++) {
+            unit(-0.36 + i * 0.13, v, 0.09, 0.2, 0.22);
+          }
+        }
+      } else if (k === 'tray') {                /* cable baskets, rungs across */
+        for (j = 0; j < 3; j++) {
+          v = -0.28 + j * 0.28;
+          moveTo(P(-0.4, v, z + 0.1));        lineTo(P(0.4, v, z + 0.1));
+          moveTo(P(-0.4, v + 0.09, z + 0.1)); lineTo(P(0.4, v + 0.09, z + 0.1));
+          for (i = 0; i < 9; i++) {
+            u = -0.38 + i * 0.095;
+            moveTo(P(u, v, z + 0.1)); lineTo(P(u, v + 0.09, z + 0.1));
+          }
+        }
+      } else {                                  /* roof plant */
+        for (i = 0; i < 3; i++) {
+          for (j = 0; j < 2; j++) {
+            unit(-0.36 + i * 0.26, -0.24 + j * 0.3, 0.18, 0.2, 0.12);
+          }
+        }
+      }
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.lineWidth = 1;
     }
 
     function frame(t) {
       ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1;
       ctx.strokeStyle = '#FFFFFF';
       ctx.lineJoin = 'round';
-      ctx.lineWidth = 1;
 
-      var i, k, p, a;
-
-      /* 1. the ground, drawing outward from the origin */
-      var g = span(t, 0, 0.20);
+      /* the ground grid, drawing outward from the origin */
+      var g = span(t, 0, 0.16);
       if (g > 0) {
-        ctx.globalAlpha = 0.14;
-        ctx.lineWidth = 0.7;
+        ctx.globalAlpha = 0.16 * (1 - span(t, 0.62, 0.9) * 0.55);
         ctx.beginPath();
-        var reach = 4.6 * g;
-        for (i = -12; i <= 12; i++) {
-          var u = i * 0.4;
+        var reach = 1.5 * g;
+        for (var i = -6; i <= 6; i++) {
+          var u = i * 0.25;
           if (Math.abs(u) > reach) { continue; }
           moveTo(P(u, -reach, 0)); lineTo(P(u, reach, 0));
           moveTo(P(-reach, u, 0)); lineTo(P(reach, u, 0));
         }
         ctx.stroke();
+        ctx.globalAlpha = 1;
       }
 
-      /* 2. the site boundary, then the perimeter road inside it */
-      var b = span(t, 0.14, 0.34);
-      if (b > 0) {
-        ctx.globalAlpha = 0.55 * b;
-        ctx.lineWidth = 1.2;
-        ctx.beginPath();
-        rect(SITE.x0, SITE.y0, SITE.x1, SITE.y1, 0);
-        ctx.stroke();
-        ctx.globalAlpha = 0.3 * b;
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        rect(SITE.x0 + 0.34, SITE.y0 + 0.34, SITE.x1 - 0.34, SITE.y1 - 0.34, 0);
-        ctx.stroke();
-      }
-
-      /* 3. the halls, rising in turn */
-      ctx.lineWidth = 1.25;
-      for (k = 0; k < HALLS.length; k++) {
-        var Hh = HALLS[k];
-        p = span(t, 0.28 + k * 0.075, 0.62 + k * 0.075);
+      /* the six layers, bottom first */
+      var k, L, p, lift, a;
+      for (k = 0; k < LAYERS.length; k++) {
+        L = LAYERS[k];
+        p = span(t, 0.10 + k * 0.085, 0.42 + k * 0.085);
         if (p <= 0) { continue; }
-        ctx.globalAlpha = Math.min(1, p * 1.5);
-        ctx.beginPath();
-        box(Hh.x, Hh.y, 0, Hh.w, Hh.d, HALL_H * p);
-        ctx.stroke();
+        lift = (1 - p) * 0.55;                 /* rises into place from below */
+        a = Math.min(1, p * 1.6);
+        plate(L.z - lift, L.kind, a);
       }
 
-      /* 4. roof plant: the rows of units that make a shed a data hall */
-      var r = span(t, 0.56, 0.82);
-      if (r > 0) {
-        ctx.globalAlpha = 0.85 * r;
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        for (k = 0; k < HALLS.length; k++) {
-          var Hr = HALLS[k];
-          for (i = 0; i < 6; i++) {
-            var ux = Hr.x + 0.22 + i * 0.3;
-            if (ux + 0.2 > Hr.x + Hr.w) { continue; }
-            box(ux, Hr.y + 0.3, HALL_H, 0.2, 0.34, 0.1);
-          }
-        }
-        ctx.stroke();
-      }
-
-      /* 5. the plant yard: substation, tanks and standby sets along one edge */
-      var y = span(t, 0.66, 0.9);
-      if (y > 0) {
-        ctx.globalAlpha = 0.8 * y;
-        ctx.lineWidth = 0.9;
-        ctx.beginPath();
-        for (i = 0; i < 4; i++) {           /* transformers */
-          box(-2.9 + i * 0.42, 1.55, 0, 0.26, 0.3, 0.24);
-        }
-        for (i = 0; i < 3; i++) {           /* standby sets */
-          box(0.6 + i * 0.52, 1.5, 0, 0.4, 0.34, 0.2);
-        }
-        for (i = 0; i < 2; i++) {           /* tanks */
-          box(2.4 + i * 0.42, 1.5, 0, 0.32, 0.34, 0.34);
-        }
-        ctx.stroke();
-        /* the incoming line: two spans of overhead conductor to the yard */
-        ctx.globalAlpha = 0.45 * y;
-        ctx.lineWidth = 0.7;
-        ctx.beginPath();
-        for (i = 0; i < 2; i++) {
-          moveTo(P(-3.3, 1.7 + i * 0.12, 0.95));
-          lineTo(P(-2.6, 1.7 + i * 0.12, 0.66));
-        }
-        moveTo(P(-3.3, 1.6, 0)); lineTo(P(-3.3, 1.6, 1.0));
-        moveTo(P(-3.42, 1.6, 0.95)); lineTo(P(-3.18, 1.6, 0.95));
-        ctx.stroke();
-      }
-
-      /* 6. the setting-out lines, once there is something to set out */
-      var c = span(t, 0.58, 0.92);
+      /* the construction lines, once there is something to connect */
+      var c = span(t, 0.46, 0.86);
       if (c > 0) {
-        ctx.globalAlpha = 0.3 * c;
-        ctx.lineWidth = 0.7;
-        ctx.setLineDash([3, 7]);
+        ctx.globalAlpha = 0.36 * c;
+        ctx.setLineDash([3, 6]);
         ctx.beginPath();
-        moveTo(P(SITE.x0, 0, 0)); lineTo(P(SITE.x1, 0, 0));
-        moveTo(P(0, SITE.y0, 0)); lineTo(P(0, SITE.y1, 0));
+        var corners = [[-0.5, -0.5], [0.5, -0.5], [0.5, 0.5], [-0.5, 0.5]];
+        var top = LAYERS[LAYERS.length - 1].z;
+        for (k = 0; k < 4; k++) {
+          moveTo(P(corners[k][0], corners[k][1], -0.12));
+          lineTo(P(corners[k][0], corners[k][1], -0.12 + (top + 0.24) * c));
+        }
         ctx.stroke();
         ctx.setLineDash([]);
+        ctx.globalAlpha = 1;
       }
-
-      ctx.globalAlpha = 1;
-      ctx.lineWidth = 1;
     }
 
     size();
