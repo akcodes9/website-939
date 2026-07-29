@@ -312,6 +312,55 @@ a { color: inherit; text-decoration: none; }
 .nav__cta { flex: none; margin-left: auto; }
 .nav__meta + .nav__cta { margin-left: var(--s4); }
 
+/* --------------------------------------------------------------------------
+   THE BAR ON A PHONE
+
+   The title block is the only wayfinding on the page and it was truncating on
+   every section below about 700px — "LAYER 06 · OPE…". Measured at 390: the
+   block had 123px and needed 191.
+
+   The cause was `margin-left: auto` on the Enquire link. An auto margin absorbs
+   ALL free space before any flex item is allowed to grow, so the leftover sat
+   in a gap beside Enquire while the block it should have gone to was squeezed
+   to nothing. Dropping the auto margin and letting the block grow gives it
+   188px at 390 — and the longest label, Layer 08 · Sustainability, needs 191.
+
+   Three short of the worst case is not a fix, so the word "Layer" goes as well
+   below 520px. The number and the name carry the meaning; the word is the part
+   nobody needed. That leaves 146 against 188, with room for a longer section
+   name than any currently on the page.
+   -------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .nav__row { gap: var(--s2); }
+  /* Both selectors, because `.nav__meta + .nav__cta` outranks `.nav__cta` and
+     was the one actually holding the 40px. Fixing only the weaker rule changed
+     nothing, which is exactly what the measurement showed. */
+  .nav__cta, .nav__meta + .nav__cta { margin-left: 0; }
+  .nav__sheet { flex: 1 1 auto; }
+}
+@media (max-width: 520px) {
+  .nav__w { display: none; }
+}
+@media (max-width: 400px) {
+  /* Below 400 the row cannot hold all three. Measured at 360 the block had
+     133px against the 153 the longest label needs, and closing a 20px gap by
+     shaving the wordmark, the chevron and the tracking together is three
+     fragile changes that break again the moment a section is renamed.
+
+     So the block takes a row of its own. The mark and the enquiry stay on the
+     first line, the block runs the full width beneath them, and it cannot
+     truncate at any width because nothing is competing with it. */
+  .nav__row { flex-wrap: wrap; gap: var(--s1) var(--s2); }
+  .nav__sheet { order: 3; flex: 1 0 100%; margin-inline: 0; padding-inline: 0; }
+  .nav__cta, .nav__meta + .nav__cta { margin-left: auto; }
+
+  /* The bar is fixed, and two rows make it 130px instead of 93. Both numbers
+     that were sized against the old height have to move with it, or an
+     anchored heading lands underneath the thing that just told you where you
+     are — measured at 121px against a 130px bar. */
+  html { scroll-padding-top: 146px; }
+}
+
 /* The title block, as a control. It has to read as a label first and a button
    second, so there is no chrome at all until the pointer arrives — then one
    hairline, the same weight as every other rule on the page. */
@@ -1030,6 +1079,13 @@ html[data-motion="on"] .plate[data-in]:not([data-on]) img { transform: scale(0.9
    This also fixes a real defect: the reveal leaves anything not yet scrolled
    past at opacity 0, so printing on load produced a nearly blank document.
    ========================================================================= */
+/* Sits here rather than beside the rest of the small-screen rules because
+   .hero declares its own padding further down the sheet; stated earlier, this
+   loses to it and the hero opens 4px under a 130px bar. */
+@media (max-width: 400px) {
+  .hero { padding-block: calc(130px + var(--s4)) var(--s4); }
+}
+
 @media print {
   @page { size: A4 landscape; margin: 14mm 16mm 26mm; }
 

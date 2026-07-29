@@ -743,6 +743,25 @@
     var layers = $$('section[id^="l"]');
     if (!out && !depth) { return; }
 
+    /* The bar is the only wayfinding on the page, so it must not truncate. On a
+       narrow screen the word "Layer" is the least useful part of it — the number
+       and the name carry the meaning — so it is written into its own span and
+       CSS drops it below 520px. Building nodes rather than setting textContent
+       is what makes that possible at all. */
+    function label(txt) {
+      out.textContent = '';
+      var m = /^(\D+\s)(.*)$/.exec(txt);
+      if (m) {
+        var w = document.createElement('span');
+        w.className = 'nav__w';
+        w.textContent = m[1];
+        out.appendChild(w);
+        out.appendChild(document.createTextNode(m[2]));
+      } else {
+        out.textContent = txt;
+      }
+    }
+
     /* The register row for whichever layer the bar is naming, so opening it
        says where you already are before it says where you can go. */
     var rows = $$('#register a');
@@ -776,7 +795,7 @@
         var idx = now.querySelector('.layer__idx');
         if (!idx) { return; }
         var parts = $$('span', idx).map(function (s) { return s.textContent.trim(); });
-        out.textContent = parts.join(' \u00B7 ');
+        label(parts.join(' \u00B7 '));
         mark(now.id);
         /* The bar and the depth rule take the colour of the system you are
            currently inside, so the hue is continuous from the drawing to the
@@ -792,7 +811,7 @@
       if (hero) {
         new IntersectionObserver(function (e) {
           if (!e[0].isIntersecting) { return; }
-          out.textContent = 'Layer 00 \u00B7 Overview';
+          label('Layer 00 \u00B7 Overview');
           mark('hero');
           document.documentElement.style.removeProperty('--sys-now');
         }, { rootMargin: '-40% 0px -40% 0px' }).observe(hero);
